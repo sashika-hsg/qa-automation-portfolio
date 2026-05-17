@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+reports/allure-results/
+reports/allure-report/
+reports/playwright-html/
+reports/newman/
+test-results/
+playwright-report/
+*.db
+data/
+.DS_Store
+*.js.map
+docs/sql-learning
+PROGRESS.md

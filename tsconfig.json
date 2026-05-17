@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@pages/*": ["src/pages/*"],
+      "@api/*": ["src/api/*"],
+      "@builders/*": ["src/builders/*"],
+      "@models/*": ["src/models/*"],
+      "@db/*": ["src/db/*"],
+      "@utils/*": ["src/utils/*"],
+      "@config/*": ["src/config/*"],
+      "@factories/*": ["src/factories/*"],
+      "@fixtures/*": ["src/fixtures/*"],
+      "@ai/*": ["src/ai/*"]
+    },
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "step-definitions/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests/performance"
+  ]
+}
