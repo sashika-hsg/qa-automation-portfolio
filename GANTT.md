@@ -48,8 +48,8 @@ gantt
 Update the status column daily.
 
 | Phase | Name | Planned days | Start | End | Status |
-| --- | --- | ---| --- | --- | --- | | 0 | Foundation | 2 | Day 1 | Day 2 | 🔄 In progress |
-| 1 | TypeScript A+ | 3 | Day 3 | Day 5 | ⏳ Not started |
+| --- | --- | ---| --- | --- | --- | | 0 | Foundation | 2 | Day 1 | Day 2 | ✅ Complete |
+| 1 | TypeScript A+ | 3 | Day 3 | Day 5 | 🔄 In progress |
 | 2 | QA Lifecycle + UX | 2 | Day 6 | Day 7 | ⏳ Not started |
 | 3 | SQL A+ | 5 | Day 8 | Day 12 | ⏳ Not started |
 | 4 | Design Patterns | 4 | Day 13 | Day 16 | ⏳ Not started |
