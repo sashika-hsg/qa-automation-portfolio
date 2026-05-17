@@ -1,0 +1,48 @@
+{
+  "name": "qa-automation-portfolio",
+  "version": "1.0.0",
+  "description": ">Production-grade QA automation framework built with Playwright, Typescript,\r >BDD AI integratio, and full QA lifecycle documentation.",
+  "homepage": "https://github.com/sashika-hsg/qa-automation-portfolio#readme",
+  "bugs": {
+    "url": "https://github.com/sashika-hsg/qa-automation-portfolio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sashika-hsg/qa-automation-portfolio.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
+    "@cucumber/cucumber": "^12.9.0",
+    "@cucumber/pretty-formatter": "^3.3.1",
+    "@playwright/test": "^1.60.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@typescript-eslint/eslint-plugin": "^8.59.3",
+    "@typescript-eslint/parser": "^8.59.3",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/node": "^25.8.0",
+    "dotenv": "^17.4.2",
+    "ts-node": "^10.9.2"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}

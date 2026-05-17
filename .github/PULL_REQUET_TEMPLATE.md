@@ -55,10 +55,10 @@
 
 ## Test results
 <!-- Paste a summary of local test results before raising this PR -->
-- Total tests:
-- Passed:
-- Failed:
-- Skipped:
+Total tests:
+-Passed:
+-Failed:
+-Skipped:
 
 ## Design pattern used
 <!-- If applicable — which pattern and where -->

@@ -11,3 +11,5 @@ playwright-report/
 data/
 .DS_Store
 *.js.map
+docs/sql-learning
+PROGRESS.md
