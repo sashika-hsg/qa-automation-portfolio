@@ -1,6 +1,6 @@
 {
     "parser" : "@typescript-eslint/parser",
-    "plugins": ["@typescrpt-eslint","prettier"],
+    "plugins": ["@typescript-eslint","prettier"],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",

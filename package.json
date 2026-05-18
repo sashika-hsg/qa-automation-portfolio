@@ -34,7 +34,7 @@
     "report:allure": "npm run report:allure:generate && npm run report:allure:open",
     "lint": "eslint . --ext .ts --ignore-pattern node_modules/ --ignore-pattern dist/",
     "lint:fix": "eslint . --ext .ts --fix --ignore-pattern node_modules/ --ignore-pattern dist/",
-   "format": "prettier --write .",
+    "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "ai:generate-data": "ts-node src/ai/AiDataGenerator.ts",
     "ai:suggest-commit": "ts-node src/ai/AiCommitHelper.ts"
@@ -48,7 +48,7 @@
     "@types/better-sqlite3": "^7.6.13",
     "@typescript-eslint/eslint-plugin": "^8.59.3",
     "@typescript-eslint/parser": "^8.59.3",
-    "eslint": "^10.4.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
