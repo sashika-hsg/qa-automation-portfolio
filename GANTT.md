@@ -29,7 +29,7 @@ gantt
   section Test Automation
   Phase 6 — UI Automation        :p6, after p5, 4d
   Phase 7 — BDD for UI           :p7, after p6, 3d
-  Phase 8 — API Automation       :p8, after p7, 4d
+  Phase 8 — API + GraphQL        :p8, after p7, 5d   
   Phase 9 — Postman + Newman     :p9, after p8, 2d
 
   section Advanced
@@ -56,7 +56,7 @@ Update the status column daily.
 | 5 | Database Layer | 2 | Day 17 | Day 18 | ⏳ Not started |
 | 6 | UI Automation | 4 | Day 19 | Day 22 | ⏳ Not started |
 | 7 | BDD for UI | 3 | Day 23 | Day 25 | ⏳ Not started |
-| 8 | API Automation | 4 | Day 26 | Day 29 | ⏳ Not started |
+| 8 | API + GraphQL Automation | 5 | Day 26 | Day 30 | ⏳ Not started |
 | 9 | Postman + Newman | 2 | Day 30 | Day 31 | ⏳ Not started |
 | 10 | AI Integration | 2 | Day 32 | Day 33 | ⏳ Not started |
 | 11 | CI/CD + CloudWatch | 2 | Day 34 | Day 35 | ⏳ Not started |
