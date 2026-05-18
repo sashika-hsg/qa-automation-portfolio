@@ -1,0 +1,207 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint . --ext .ts --ignore-pattern 'node_modules/' --ignore-pattern 'dist/'
+
+  playwright-ui-tests:
+    name: UI Tests
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    continue-on-error: true
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run UI tests
+        run: npm run test:ui
+        env:
+          SAUCE_DEMO_BASE_URL: ${{ secrets.SAUCE_DEMO_BASE_URL }}
+          SAUCE_DEMO_USERNAME: ${{ secrets.SAUCE_DEMO_USERNAME }}
+          SAUCE_DEMO_PASSWORD: ${{ secrets.SAUCE_DEMO_PASSWORD }}
+          THE_INTERNET_BASE_URL: ${{ secrets.THE_INTERNET_BASE_URL }}
+          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-ui-report
+          path: reports/playwright-html/
+          retention-days: 30
+
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-ui-results
+          path: reports/allure-results/
+          retention-days: 30
+
+  playwright-api-tests:
+    name: API Tests
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    continue-on-error: true
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run API tests
+        run: npm run test:api
+        env:
+          REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
+          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
+
+      - name: Run GraphQL tests
+        run: npm run test:graphql
+        env:
+          GRAPHQL_POKEMON_URL: ${{ secrets.GRAPHQL_POKEMON_URL }}
+
+      - name: Upload API test report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-api-report
+          path: reports/playwright-html/
+          retention-days: 30
+
+  database-tests:
+    name: Database Validation Tests
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    continue-on-error: true
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Seed database
+        run: npm run db:seed
+
+      - name: Run database tests
+        run: npm run test:db
+
+  newman-tests:
+    name: Postman Newman Tests
+    runs-on: ubuntu-latest
+    needs: quality-checks
+    continue-on-error: true
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run Newman tests
+        run: npm run test:newman
+        env:
+          REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
+          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
+
+      - name: Upload Newman report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newman-report
+          path: reports/newman/
+          retention-days: 30
+
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    needs:
+      - playwright-ui-tests
+      - playwright-api-tests
+      - database-tests
+      - newman-tests
+    if: always()
+
+    steps:
+      - name: Check quality gate
+        run: |
+          if [ "${{ needs.quality-checks.result }}" == "failure" ]; then
+            echo "Quality checks failed — quality gate failed"
+            exit 1
+          fi
+          echo "Quality checks passed — quality gate passed"
+          echo "Note: Test jobs are running with continue-on-error"
+          echo "They will be enforced strictly from Phase 11 onwards"

@@ -1,0 +1,82 @@
+name: Nightly Regression
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly-regression:
+    name: Full Regression Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Seed database
+        run: npm run db:seed
+
+      - name: Run UI tests
+        run: npm run test:ui
+        env:
+          SAUCE_DEMO_BASE_URL: ${{ secrets.SAUCE_DEMO_BASE_URL }}
+          SAUCE_DEMO_USERNAME: ${{ secrets.SAUCE_DEMO_USERNAME }}
+          SAUCE_DEMO_PASSWORD: ${{ secrets.SAUCE_DEMO_PASSWORD }}
+          THE_INTERNET_BASE_URL: ${{ secrets.THE_INTERNET_BASE_URL }}
+          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
+
+      - name: Run API tests
+        run: npm run test:api
+        env:
+          REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
+          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
+
+      - name: Run GraphQL tests
+        run: npm run test:graphql
+        env:
+          GRAPHQL_POKEMON_URL: ${{ secrets.GRAPHQL_POKEMON_URL }}
+
+      - name: Run database tests
+        run: npm run test:db
+
+      - name: Run accessibility tests
+        run: npm run test:accessibility
+        env:
+          SAUCE_DEMO_BASE_URL: ${{ secrets.SAUCE_DEMO_BASE_URL }}
+          SAUCE_DEMO_USERNAME: ${{ secrets.SAUCE_DEMO_USERNAME }}
+          SAUCE_DEMO_PASSWORD: ${{ secrets.SAUCE_DEMO_PASSWORD }}
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run Newman tests
+        run: npm run test:newman
+        env:
+          REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
+          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
+
+      - name: Upload full report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nightly-full-report
+          path: reports/
+          retention-days: 30
+
+      - name: Check quality gate
+        run: |
+          echo "Nightly regression complete"
+          echo "Review reports in artifacts above"

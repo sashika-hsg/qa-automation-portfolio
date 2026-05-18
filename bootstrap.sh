@@ -60,6 +60,7 @@ mkdir -p tests/ui/restfulBooker
 mkdir -p tests/api/reqres
 mkdir -p tests/api/restfulBooker
 mkdir -p tests/api/security
+mkdir -p tests/api/graphql
 mkdir -p tests/db
 mkdir -p tests/accessibility
 mkdir -p tests/performance
@@ -77,6 +78,7 @@ mkdir -p features/ui/theInternet
 mkdir -p features/ui/restfulBooker
 mkdir -p features/api/reqres
 mkdir -p features/api/restfulBooker
+mkdir -p features/api/graphql
 
 echo "  features/ folders created"
 
