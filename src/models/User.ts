@@ -10,13 +10,13 @@
  * const role = UserRole.STANDARD;
  */
 export enum UserRole {
-  STANDARD = 'standard_user',
-  LOCKED = 'locked_out_user',
-  PROBLEM = 'problem_user',
-  PERFORMANCE = 'performance_glitch_user',
-  ERROR = 'error_user',
-  VISUAL = 'visual_user',
-  ADMIN = 'admin',
+  STANDARD = 'standard_user', //can login and buy items
+  LOCKED = 'locked_out_user', //cannot login - tests the locked account error
+  PROBLEM = 'problem_user', //images are broke - tests visual defects
+  PERFORMANCE = 'performance_glitch_user', // app runs slowly - tests for performance issues
+  ERROR = 'error_user', //Throws errors on actions - tests error handling
+  VISUAL = 'visual_user', // Has visual diffrences - tests visual regression
+  ADMIN = 'admin', //Admin access = reserved for admin scenarios
 }
 /**
  * Represents the status of a user account.
@@ -31,7 +31,7 @@ export type UserStatus = 'active' | 'inactive' | 'locked';
  * -UserBuilder - creates test data
  * -SQLiteUserRepository - persists to database
  * -Login tests- Sauce Demo UI scenarios
- * - API tests- Req/Res user endpoints
+ * - API tests- ReqRes user endpoints
  */
 export interface User {
   id?: number;
