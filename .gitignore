@@ -13,3 +13,4 @@ data/
 *.js.map
 docs/sql-learning
 PROGRESS.md
+src/utils/TypeScriptPlayground.ts
