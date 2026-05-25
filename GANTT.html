@@ -6,84 +6,38 @@
   <title>QA Automation Portfolio — Project Gantt Chart</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #f8f9fa;
       color: #1a1a2e;
       padding: 2rem;
     }
-
-    .header {
-      margin-bottom: 2rem;
-    }
-
-    .header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 0.25rem;
-    }
-
-    .header p {
-      font-size: 0.875rem;
-      color: #6c757d;
-    }
-
-    .legend {
-      display: flex;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      color: #495057;
-    }
-
-    .legend-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-    }
-
+    .header { margin-bottom: 2rem; }
+    .header h1 { font-size: 1.5rem; font-weight: 600; color: #1a1a2e; margin-bottom: 0.25rem; }
+    .header p { font-size: 0.875rem; color: #6c757d; }
+    .legend { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #495057; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
     .summary-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 1rem;
       margin-bottom: 2rem;
     }
-
     .metric {
       background: white;
       border: 1px solid #e9ecef;
       border-radius: 8px;
       padding: 1rem;
     }
-
-    .metric-label {
-      font-size: 0.75rem;
-      color: #6c757d;
-      margin-bottom: 0.25rem;
-    }
-
-    .metric-value {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #1a1a2e;
-    }
-
+    .metric-label { font-size: 0.75rem; color: #6c757d; margin-bottom: 0.25rem; }
+    .metric-value { font-size: 1.5rem; font-weight: 600; color: #1a1a2e; }
     .gantt-container {
       background: white;
       border: 1px solid #e9ecef;
       border-radius: 12px;
       overflow: hidden;
     }
-
     .gantt-header {
       display: grid;
       grid-template-columns: 220px 80px 1fr;
@@ -96,7 +50,6 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-
     .gantt-row {
       display: grid;
       grid-template-columns: 220px 80px 1fr;
@@ -105,31 +58,11 @@
       align-items: center;
       transition: background 0.15s;
     }
-
-    .gantt-row:hover {
-      background: #f8f9fa;
-    }
-
-    .gantt-row:last-child {
-      border-bottom: none;
-    }
-
-    .phase-name {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #1a1a2e;
-    }
-
-    .phase-days {
-      font-size: 0.8rem;
-      color: #6c757d;
-    }
-
-    .bar-container {
-      position: relative;
-      height: 28px;
-    }
-
+    .gantt-row:hover { background: #f8f9fa; }
+    .gantt-row:last-child { border-bottom: none; }
+    .phase-name { font-size: 0.85rem; font-weight: 500; color: #1a1a2e; }
+    .phase-days { font-size: 0.8rem; color: #6c757d; }
+    .bar-container { position: relative; height: 28px; }
     .bar {
       position: absolute;
       height: 22px;
@@ -143,7 +76,6 @@
       white-space: nowrap;
       overflow: hidden;
     }
-
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -154,22 +86,9 @@
       font-weight: 500;
       margin-top: 2px;
     }
-
-    .status-complete {
-      background: #d3f9d8;
-      color: #2b8a3e;
-    }
-
-    .status-progress {
-      background: #fff3bf;
-      color: #856404;
-    }
-
-    .status-pending {
-      background: #f1f3f5;
-      color: #6c757d;
-    }
-
+    .status-complete { background: #d3f9d8; color: #2b8a3e; }
+    .status-progress { background: #fff3bf; color: #856404; }
+    .status-pending { background: #f1f3f5; color: #6c757d; }
     .section-divider {
       background: #f8f9fa;
       padding: 0.5rem 1rem;
@@ -180,32 +99,7 @@
       letter-spacing: 0.08em;
       border-bottom: 1px solid #e9ecef;
     }
-
-    .phase-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .day-labels {
-      display: grid;
-      grid-template-columns: 220px 80px 1fr;
-      padding: 0.5rem 1rem;
-      border-bottom: 1px solid #e9ecef;
-    }
-
-    .day-track {
-      position: relative;
-      height: 20px;
-    }
-
-    .day-label {
-      position: absolute;
-      font-size: 0.65rem;
-      color: #adb5bd;
-      transform: translateX(-50%);
-    }
-
+    .phase-cell { display: flex; flex-direction: column; gap: 2px; }
     .footer {
       margin-top: 1.5rem;
       font-size: 0.75rem;
@@ -218,49 +112,22 @@
 
   <div class="header">
     <h1>QA Automation Portfolio — Project Gantt Chart</h1>
-    <p>41-day build plan · 13 phases · 129 hours · Updated daily</p>
+    <p>43-day build plan · 14 phases · 129 hours · Updated daily</p>
   </div>
 
   <div class="summary-row">
-    <div class="metric">
-      <div class="metric-label">Total phases</div>
-      <div class="metric-value">13</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Total days</div>
-      <div class="metric-value">43</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Total hours</div>
-      <div class="metric-value">129</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Completed</div>
-      <div class="metric-value" id="completed-count">1</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">In progress</div>
-      <div class="metric-value" id="progress-count">1</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Remaining</div>
-      <div class="metric-value" id="remaining-count">11</div>
-    </div>
+    <div class="metric"><div class="metric-label">Total phases</div><div class="metric-value">14</div></div>
+    <div class="metric"><div class="metric-label">Total days</div><div class="metric-value">43</div></div>
+    <div class="metric"><div class="metric-label">Total hours</div><div class="metric-value">129</div></div>
+    <div class="metric"><div class="metric-label">Completed</div><div class="metric-value">2</div></div>
+    <div class="metric"><div class="metric-label">In progress</div><div class="metric-value">1</div></div>
+    <div class="metric"><div class="metric-label">Remaining</div><div class="metric-value">11</div></div>
   </div>
 
   <div class="legend">
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#2b8a3e"></div>
-      Complete
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#f59f00"></div>
-      In progress
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#dee2e6"></div>
-      Not started
-    </div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2b8a3e"></div>Complete</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59f00"></div>In progress</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#dee2e6"></div>Not started</div>
   </div>
 
   <div class="gantt-container">
@@ -276,13 +143,22 @@
     <div class="gantt-row">
       <div class="phase-cell">
         <span class="phase-name">0 — Foundation</span>
-        <span class="status-badge status-progress">🔄 In progress</span>
+        <span class="status-badge status-complete">✅ Complete</span>
       </div>
       <div class="phase-days">2 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:0%;width:4.9%;background:#2b8a3e;color:white">
-          Days 1–2
-        </div>
+        <div class="bar" style="left:0%;width:4.7%;background:#2b8a3e;color:white">Days 1–2</div>
+      </div>
+    </div>
+
+    <div class="gantt-row">
+      <div class="phase-cell">
+        <span class="phase-name">CI — GitHub Actions</span>
+        <span class="status-badge status-complete">✅ Complete</span>
+      </div>
+      <div class="phase-days">1 day</div>
+      <div class="bar-container">
+        <div class="bar" style="left:4.7%;width:2.3%;background:#2b8a3e;color:white">3</div>
       </div>
     </div>
 
@@ -290,14 +166,12 @@
 
     <div class="gantt-row">
       <div class="phase-cell">
-        <span class="phase-name">1 — TypeScript </span>
-        <span class="status-badge status-pending">🔄 In progress</span>
+        <span class="phase-name">1 — TypeScript A+</span>
+        <span class="status-badge status-progress">🔄 In progress</span>
       </div>
       <div class="phase-days">3 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:4.9%;width:7.3%;background:#f59f00;color:#7d4e00">
-          Days 3–5
-        </div>
+        <div class="bar" style="left:7%;width:7%;background:#f59f00;color:#7d4e00">Days 4–6</div>
       </div>
     </div>
 
@@ -308,22 +182,18 @@
       </div>
       <div class="phase-days">2 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:12.2%;width:4.9%;background:#dee2e6;color:#495057">
-          Days 6–7
-        </div>
+        <div class="bar" style="left:14%;width:4.7%;background:#dee2e6;color:#495057">Days 7–8</div>
       </div>
     </div>
 
     <div class="gantt-row">
       <div class="phase-cell">
-        <span class="phase-name">3 — SQL </span>
+        <span class="phase-name">3 — SQL A+</span>
         <span class="status-badge status-pending">⏳ Not started</span>
       </div>
       <div class="phase-days">5 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:17.1%;width:12.2%;background:#dee2e6;color:#495057">
-          Days 8–12
-        </div>
+        <div class="bar" style="left:18.7%;width:11.6%;background:#dee2e6;color:#495057">Days 9–13</div>
       </div>
     </div>
 
@@ -336,9 +206,7 @@
       </div>
       <div class="phase-days">4 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:29.3%;width:9.8%;background:#dee2e6;color:#495057">
-          Days 13–16
-        </div>
+        <div class="bar" style="left:30.3%;width:9.3%;background:#dee2e6;color:#495057">Days 14–17</div>
       </div>
     </div>
 
@@ -349,9 +217,7 @@
       </div>
       <div class="phase-days">2 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:39.1%;width:4.9%;background:#dee2e6;color:#495057">
-          Days 17–18
-        </div>
+        <div class="bar" style="left:39.6%;width:4.7%;background:#dee2e6;color:#495057">Days 18–19</div>
       </div>
     </div>
 
@@ -364,9 +230,7 @@
       </div>
       <div class="phase-days">4 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:44%;width:9.8%;background:#dee2e6;color:#495057">
-          Days 19–22
-        </div>
+        <div class="bar" style="left:44.3%;width:9.3%;background:#dee2e6;color:#495057">Days 20–23</div>
       </div>
     </div>
 
@@ -377,22 +241,18 @@
       </div>
       <div class="phase-days">3 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:53.8%;width:7.3%;background:#dee2e6;color:#495057">
-          Days 23–25
-        </div>
+        <div class="bar" style="left:53.6%;width:7%;background:#dee2e6;color:#495057">Days 24–26</div>
       </div>
     </div>
 
     <div class="gantt-row">
       <div class="phase-cell">
-        <span class="phase-name">8 — API & GraphQL Automation</span>
+        <span class="phase-name">8 — API + GraphQL</span>
         <span class="status-badge status-pending">⏳ Not started</span>
       </div>
       <div class="phase-days">5 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:61.1%;width:9.8%;background:#dee2e6;color:#495057">
-          Days 26–29
-        </div>
+        <div class="bar" style="left:60.6%;width:11.6%;background:#dee2e6;color:#495057">Days 27–31</div>
       </div>
     </div>
 
@@ -403,9 +263,7 @@
       </div>
       <div class="phase-days">2 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:70.9%;width:4.9%;background:#dee2e6;color:#495057">
-          Days 30–31
-        </div>
+        <div class="bar" style="left:72.2%;width:4.7%;background:#dee2e6;color:#495057">Days 32–33</div>
       </div>
     </div>
 
@@ -418,9 +276,7 @@
       </div>
       <div class="phase-days">2 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:75.8%;width:4.9%;background:#dee2e6;color:#495057">
-          Days 32–33
-        </div>
+        <div class="bar" style="left:76.9%;width:4.7%;background:#dee2e6;color:#495057">Days 34–35</div>
       </div>
     </div>
 
@@ -431,9 +287,7 @@
       </div>
       <div class="phase-days">2 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:80.7%;width:4.9%;background:#dee2e6;color:#495057">
-          Days 34–35
-        </div>
+        <div class="bar" style="left:81.6%;width:4.7%;background:#dee2e6;color:#495057">Days 36–37</div>
       </div>
     </div>
 
@@ -446,9 +300,7 @@
       </div>
       <div class="phase-days">5 days</div>
       <div class="bar-container">
-        <div class="bar" style="left:85.6%;width:12.2%;background:#dee2e6;color:#495057">
-          Days 36–40
-        </div>
+        <div class="bar" style="left:86.3%;width:11.6%;background:#dee2e6;color:#495057">Days 38–42</div>
       </div>
     </div>
 
@@ -459,9 +311,7 @@
       </div>
       <div class="phase-days">1 day</div>
       <div class="bar-container">
-        <div class="bar" style="left:97.6%;width:2.4%;background:#dee2e6;color:#495057">
-          41
-        </div>
+        <div class="bar" style="left:97.9%;width:2.1%;background:#dee2e6;color:#495057">43</div>
       </div>
     </div>
 
