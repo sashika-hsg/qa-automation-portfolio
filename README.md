@@ -162,40 +162,96 @@ npm run test:smoke
 ## Project Structure
 
 qa-automation-portfolio/
-├── .github/workflows/     CI/CD pipelines
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml
+│   │   └── nightly.yml
+│   └── PULL_REQUEST_TEMPLATE.md
 ├── docs/
-│   ├── design/            Architecture, patterns, diagrams
-│   ├── qa-lifecycle/      Requirements, strategy, plan, cases, reports
-│   ├── adr/               Architecture Decision Records
-│   ├── usability/         Heuristics evaluation, test scripts
-│   └── ai-integration/    AI usage documentation
+│   ├── adr/
+│   │   ├── TEMPLATE.md
+│   │   ├── ADR-001-why-playwright.md
+│   │   └── ADR-002-why-typescript.md
+│   ├── design/
+│   │   └── diagrams/
+│   ├── qa-lifecycle/
+│   ├── usability/
+│   └── ai-integration/
 ├── src/
-│   ├── ai/                AI integration — Claude API
-│   ├── api/               API clients and handler chain
-│   ├── builders/          Builder pattern — test data
-│   ├── config/            Singleton config manager
-│   ├── db/                Repository pattern — SQLite
-│   ├── factories/         Factory pattern — page and client creation
-│   ├── fixtures/          Playwright custom fixtures
-│   ├── models/            TypeScript interfaces and enums
-│   ├── pages/             Page Object Model — all sites
-│   ├── reporting/         CloudWatch reporter
-│   ├── strategies/        Browser strategy pattern
-│   └── utils/             Logger, schema validator, helpers
+│   ├── ai/
+│   ├── api/
+│   │   ├── base/
+│   │   ├── clients/
+│   │   ├── handlers/
+│   │   └── schemas/
+│   ├── builders/
+│   ├── config/
+│   ├── db/
+│   │   ├── migrations/
+│   │   ├── repositories/
+│   │   └── seed/
+│   ├── factories/
+│   ├── fixtures/
+│   ├── models/
+│   │   ├── User.ts
+│   │   ├── Booking.ts
+│   │   ├── ApiResponse.ts
+│   │   ├── GraphQL.ts
+│   │   ├── TestResult.ts
+│   │   └── index.ts
+│   ├── pages/
+│   │   ├── base/
+│   │   ├── sauceDemo/
+│   │   ├── theInternet/
+│   │   └── restfulBooker/
+│   ├── reporting/
+│   ├── strategies/
+│   └── utils/
 ├── tests/
-│   ├── ui/                Playwright UI specs
-│   ├── api/               Playwright API specs + GraphQL
-│   ├── db/                Database validation specs
-│   ├── accessibility/     axe-core checks
-│   └── performance/       k6 load test scripts
-├── features/              Gherkin BDD feature files
-├── step-definitions/      Cucumber step implementations
-├── postman/               Postman collections and environments
-├── PHASES.md              All 14 project phases
-├── GANTT.md               Project timeline
-├── GANTT.html             Interactive Gantt chart
-├── CONTRIBUTING.md        Coding standards and Git workflow
-└── README.md              This file
+│   ├── ui/
+│   │   ├── sauceDemo/
+│   │   ├── theInternet/
+│   │   └── restfulBooker/
+│   ├── api/
+│   │   ├── reqres/
+│   │   ├── restfulBooker/
+│   │   ├── graphql/
+│   │   └── security/
+│   ├── db/
+│   ├── accessibility/
+│   └── performance/
+├── features/
+│   ├── ui/
+│   │   ├── sauceDemo/
+│   │   ├── theInternet/
+│   │   └── restfulBooker/
+│   └── api/
+│       ├── reqres/
+│       ├── restfulBooker/
+│       └── graphql/
+├── step-definitions/
+│   ├── ui/
+│   └── api/
+├── postman/
+│   ├── collections/
+│   └── environments/
+├── reports/
+├── data/
+├── .env.example
+├── .eslintrc.json
+├── .prettierrc
+├── .commitlintrc.json
+├── .gitignore
+├── .gitattributes
+├── bootstrap.sh
+├── playwright.config.ts
+├── tsconfig.json
+├── package.json
+├── PHASES.md
+├── GANTT.md
+├── GANTT.html
+├── CONTRIBUTING.md
+└── README.md
 
 ---
 

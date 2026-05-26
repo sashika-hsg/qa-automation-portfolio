@@ -50,8 +50,8 @@ gantt
 | --- | --- | --- | --- | --- | --- |
 | 0 | Foundation | 2 | Day 1 | Day 2 | ✅ Complete |
 | CI | GitHub Actions | 1 | Day 3 | Day 3 | ✅ Complete |
-| 1 | TypeScript A+ | 3 | Day 4 | Day 6 | 🔄 In progress |
-| 2 | QA Lifecycle + UX | 2 | Day 7 | Day 8 | ⏳ Not started |
+| 1 | TypeScript A+ | 3 | Day 4 | Day 6 | ✅ Complete |
+| 2 | QA Lifecycle + UX | 2 | Day 7 | Day 8 | 🔄 In progress |
 | 3 | SQL A+ | 5 | Day 9 | Day 13 | ⏳ Not started |
 | 4 | Design Patterns | 4 | Day 14 | Day 17 | ⏳ Not started |
 | 5 | Database Layer | 2 | Day 18 | Day 19 | ⏳ Not started |
