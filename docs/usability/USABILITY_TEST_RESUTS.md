@@ -2,7 +2,7 @@
 
 **Project:** QA Automation Portfolio
 **Version:** 1.0
-**Date:** 2025-01-20
+**Date:** 2026-05-26
 **Author:** Sashika Samaragunaratne
 **Status:** Template — to be completed after usability sessions
 

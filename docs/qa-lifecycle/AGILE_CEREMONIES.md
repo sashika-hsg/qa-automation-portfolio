@@ -2,8 +2,8 @@
 
 **Project:** QA Automation Portfolio
 **Version:** 1.0
-**Date:** 2025-01-20
-**Author:** Your Name
+**Date:** 2026-05-26
+**Author:** Sashika Samaragunaratne
 **Status:** Approved
 
 ---
