@@ -23,7 +23,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Phases | Focus |
 | --- | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — Day 4 of 43 | 14 phases | Core automation framework |
+| **v1 — Current** | 🔄 In progress — Day 10 of 43 | 14 phases | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | 10 phases | Advanced tooling and cloud |
 
 ---
@@ -36,7 +36,7 @@ expected of a Senior QA Engineer or SDET.
 
 | Skill | Tool | Status |
 | --- | --- | --- |
-| UI automation | Playwright + POM | 🔄 Phase 6 |
+| UI automation | Playwright + POM | 🔄 In progress — login suite passing |
 | API testing — REST | Playwright request context | 🔄 Phase 8 |
 | API testing — GraphQL | Playwright + GraphQLClient | 🔄 Phase 8 |
 | BDD | Cucumber.js + Gherkin | 🔄 Phase 7 |
@@ -147,6 +147,7 @@ npm run test:smoke
 | `npm run test:ui:bdd` | BDD UI feature files |
 | `npm run test:api:bdd` | BDD API feature files |
 
+> Note: some scripts are placeholders for upcoming phases — see PHASES.md
 ---
 
 ## Reporting
@@ -275,15 +276,15 @@ Every push triggers the CI pipeline automatically.
 
 This project includes the complete QA lifecycle — not just scripts.
 
-| Artefact | Location |
-| --- | --- |
-| Requirements | `docs/qa-lifecycle/REQUIREMENTS.md` |
-| Test Strategy | `docs/qa-lifecycle/TEST_STRATEGY.md` |
-| Test Plan | `docs/qa-lifecycle/TEST_PLAN.md` |
-| Test Cases | `docs/qa-lifecycle/TEST_CASES.md` |
-| Bug Report Template | `docs/qa-lifecycle/BUG_REPORT_TEMPLATE.md` |
-| Test Summary Report | `docs/qa-lifecycle/TEST_SUMMARY_REPORT.md` |
-| Usability Evaluation | `docs/usability/HEURISTICS_EVALUATION.md` |
+| Artefact | Location | Status |
+| --- | --- | --- |
+| Requirements | `docs/qa-lifecycle/REQUIREMENTS.md` | ✅ Complete |
+| Test Strategy | `docs/qa-lifecycle/TEST_STRATEGY.md` | ✅ Complete |
+| Test Plan | `docs/qa-lifecycle/TEST_PLAN.md` | ✅ Complete |
+| Test Cases | `docs/qa-lifecycle/TEST_CASES.md` | ✅ Complete |
+| Bug Report Template | `docs/qa-lifecycle/BUG_REPORT_TEMPLATE.md` | ✅ Complete |
+| Test Summary Report | `docs/qa-lifecycle/TEST_SUMMARY_REPORT.md` | ✅ Complete |
+| Usability Evaluation | `docs/usability/HEURISTICS_EVALUATION.md` | ✅ Complete |
 
 ---
 
@@ -292,16 +293,26 @@ This project includes the complete QA lifecycle — not just scripts.
 Every major technology decision is documented with context,
 alternatives considered, and consequences.
 
-| ADR | Decision |
-| --- | --- |
-| ADR-001 | Why Playwright over Selenium |
-| ADR-002 | Why TypeScript over JavaScript |
-| ADR-003 | Why SQLite over PostgreSQL |
-| ADR-004 | Why BDD with Cucumber |
-| ADR-005 | Why Restful Booker as test application |
-| ADR-006 | Why Claude API for AI integration |
-| ADR-007 | Why Cucumber.js over other BDD tools |
-| ADR-008 | Why GraphQL testing was included |
+| ADR | Decision | STATUS |
+| --- | --- | --- |
+| ADR-001 | Why Playwright over Selenium | ✅ Complete |
+| ADR-002 | Why TypeScript over JavaScript | ✅ Complete |
+| ADR-003 | Why SQLite over PostgreSQL | ⏳ Planned |
+| ADR-004 | Why BDD with Cucumber | ⏳ Planned |
+| ADR-005 | Why Restful Booker as test application | ⏳ Planned |
+| ADR-006 | Why Claude API for AI integration | ⏳ Planned |
+| ADR-007 | Why Cucumber.js over other BDD tools | ⏳ Planned |
+| ADR-008 | Why GraphQL testing was included | ⏳ Planned |
+
+---
+
+## Current Test Suite
+
+| Suite | File | Tests | Status |
+| --- | --- | --- | --- |
+| Sauce Demo Login | `tests/ui/sauceDemo/login.spec.ts` | 6 | ✅ Passing |
+
+More suites are added daily — see commit history for progress.
 
 ---
 
