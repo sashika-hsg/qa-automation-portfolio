@@ -23,7 +23,7 @@ export class InventoryPage extends BasePage {
    * Navigate to the inventory page directly.
    */
   async navigate(): Promise<void> {
-    await this.page.goto('https://www.saucedemo.com/inventory.html');
+    await this.page.goto('/inventory.html');
     await this.waitForPageLoad();
   }
 
