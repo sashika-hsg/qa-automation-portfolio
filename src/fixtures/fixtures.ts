@@ -1,7 +1,9 @@
 import { test as base } from '@playwright/test';
 import { LoginPage } from '../pages/sauceDemo/LoginPage';
 import { InventoryPage } from '../pages/sauceDemo/InventoryPage';
-import { SAUCE_DEMO_USERS } from '../utils/testData';
+import { CartPage } from '@pages/sauceDemo/CartPage';
+import { CheckoutPage } from '@pages/sauceDemo/CheckoutPage';
+import { SAUCE_DEMO_USERS, SAUCE_DEMO_PRODUCTS } from '../utils/testData';
 
 /**
  * Custom fixture types for the QA Automation Portfolio.
@@ -14,6 +16,8 @@ type SauceDemoFixtures = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
   authenticatedPage: InventoryPage;
+  cartPage: CartPage;
+  checkoutPage: CheckoutPage;
 };
 
 /**
@@ -56,6 +60,40 @@ export const test = base.extend<SauceDemoFixtures>({
     const inventoryPage = new InventoryPage(page);
     await inventoryPage.assertPageLoaded();
     await use(inventoryPage);
+  },
+
+  /**
+   * Provides a CartsPage instance - no  pre-populated.
+   * */
+  cartPage: async ({ page }, use) => {
+    const cartPage = new CartPage(page);
+    await use(cartPage);
+  },
+
+  /**
+   * Provides a CheckoutPage instance - logged in with one item
+   * already added to the car,
+   * and navigated to checkout step one.
+   * Use this fixture for checkout flow tests.
+   */
+  checkoutPage: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.navigate();
+    await loginPage.login(
+      SAUCE_DEMO_USERS.STANDARD.username,
+      SAUCE_DEMO_USERS.STANDARD.password
+    );
+    const inventoryPage = new InventoryPage(page);
+    await inventoryPage.assertPageLoaded();
+    await inventoryPage.addProductToCart(SAUCE_DEMO_PRODUCTS.BACKPACK);
+    await inventoryPage.goToCart();
+
+    const cartPage = new CartPage(page);
+    await cartPage.assertPageLoaded();
+    await cartPage.proceedToCheckout();
+
+    const checkoutPage = new CheckoutPage(page);
+    await use(checkoutPage);
   },
 });
 
