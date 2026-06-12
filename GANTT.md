@@ -55,7 +55,7 @@ gantt
 | 3 | SQL A+ | 5 | Day 9 | Day 13 | 🔄 In progress |
 | 4 | Design Patterns | 4 | Day 14 | Day 17 | ⏳ Not started |
 | 5 | Database Layer | 2 | Day 18 | Day 19 | ⏳ Not started |
-| 6 | UI Automation | 4 | Day 20 | Day 23 | ⏳ Not started |
+| 6 | UI Automation | 4 | Day 20 | Day 23 | 🔄 In progress  |
 | 7 | BDD for UI | 3 | Day 24 | Day 26 | ⏳ Not started |
 | 8 | API + GraphQL | 5 | Day 27 | Day 31 | ⏳ Not started |
 | 9 | Postman + Newman | 2 | Day 32 | Day 33 | ⏳ Not started |
