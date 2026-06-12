@@ -14,7 +14,7 @@ export class InventoryPage extends BasePage {
   private readonly cartBadge = this.page.locator('.shopping_cart_badge');
   private readonly cartIcon = this.page.locator('.shopping_cart_link');
   private readonly sortDropdown = this.page.locator(
-    '[data-test="product_sort_container"]'
+    '[data-test="product-sort-container"]'
   );
   private readonly menuButton = this.page.locator('#react-burger-menu-btn');
   private readonly logoutLink = this.page.locator('#logout_sidebar_link');
