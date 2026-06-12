@@ -1,7 +1,10 @@
 {
-    "editor.inlineSuggest.enabled": false,
+    "editor.inlineSuggest.enabled": true,
     "github.copilot.enable":{
-        "*":false
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
     },
     "editor.tabSize": 2,
     "[typescript]": {
