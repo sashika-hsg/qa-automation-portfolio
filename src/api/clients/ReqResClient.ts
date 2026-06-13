@@ -15,7 +15,9 @@ export class ReqResClient extends ApiClient {
    * @param request - Playwright's APIRequestContext (from fixtures)
    */
   constructor(request: APIRequestContext) {
-    super(request, BASE_URLS.REQRES);
+    super(request, BASE_URLS.REQRES, {
+      'x-api-key': process.env.REQRES_API_KEY ?? '',
+    });
   }
 
   /**

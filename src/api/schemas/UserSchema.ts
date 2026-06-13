@@ -25,8 +25,37 @@ export const userSchema = {
 } as const;
 
 /**
+ * JSON Schema for a single item in the GET /api/users (list) response.
+ *
+ * NOTE: As of the current ReqRes API, /api/users?page=N returns
+ * color/pantone reference data (not person records), while
+ * /api/users/:id still returns person records with email.
+ * This appears to be a deliberate change in ReqRes's demo dataset.
+ *
+ * Example item:
+ * {
+ *   "id": 7,
+ *   "name": "sand dollar",
+ *   "year": 2006,
+ *   "color": "#DECDBE",
+ *   "pantone_value": "13-1106"
+ * }
+ */
+export const colorItemSchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'number' },
+    name: { type: 'string' },
+    year: { type: 'number' },
+    color: { type: 'string' },
+    pantone_value: { type: 'string' },
+  },
+  required: ['id', 'name', 'year', 'color', 'pantone_value'],
+} as const;
+
+/**
  * JSON Schema for the GET /api/users (list) response.
- * Wraps userSchema in pagination metadata.
+ * Wraps colorItemSchema in pagination metadata.
  */
 export const userListSchema = {
   type: 'object',
@@ -37,7 +66,15 @@ export const userListSchema = {
     total_pages: { type: 'number' },
     data: {
       type: 'array',
-      items: userSchema,
+      items: colorItemSchema,
+    },
+    support: {
+      type: 'object',
+      properties: {
+        url: { type: 'string' },
+        text: { type: 'string' },
+      },
+      required: ['url', 'text'],
     },
   },
   required: ['page', 'per_page', 'total', 'total_pages', 'data'],

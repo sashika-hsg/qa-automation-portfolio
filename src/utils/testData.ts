@@ -67,3 +67,19 @@ export const CHECKOUT_DATA = {
     postalCode: '',
   },
 } as const;
+/**
+ * Test data for ReqRes API tests.
+ * ReqRes is a mock API — these IDs correspond to its known
+ * fixed dataset (users 1-12 exist, others return 404).
+ */
+export const REQRES_USERS = {
+  EXISTING_USER_ID: 2,
+  NON_EXISTENT_USER_ID: 23,
+} as const;
+
+export const REQRES_TEST_USER = {
+  NAME: 'Sashika',
+  JOB: 'QA Engineer',
+  UPDATED_JOB_FULL: 'Senior QA Engineer',
+  UPDATED_JOB_PARTIAL: 'QA Lead',
+} as const;

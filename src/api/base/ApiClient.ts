@@ -12,14 +12,20 @@ import { APIRequestContext, APIResponse } from '@playwright/test';
 export class ApiClient {
   protected request: APIRequestContext;
   protected baseUrl: string;
+  protected headers: Record<string, string>;
 
   /**
    * @param request - Playwright's APIRequestContect (from fixtures)
    * @param baseUrl - base URL for this API (ex: http://reqres.in)
    */
-  constructor(request: APIRequestContext, baseUrl: string) {
+  constructor(
+    request: APIRequestContext,
+    baseUrl: string,
+    headers: Record<string, string>
+  ) {
     this.request = request;
     this.baseUrl = baseUrl;
+    this.headers = headers;
   }
 
   /**
@@ -27,7 +33,9 @@ export class ApiClient {
    * @param endpoint - path relative to the baseUrl (ex: '/api/user/2' )
    */
   async get(endpoint: string): Promise<APIResponse> {
-    return this.request.get(`${this.baseUrl}${endpoint}`);
+    return this.request.get(`${this.baseUrl}${endpoint}`, {
+      headers: this.headers,
+    });
   }
 
   /**
@@ -36,7 +44,10 @@ export class ApiClient {
    * @param data - request body, sent as JSON
    */
   async post(endpoint: string, data: object): Promise<APIResponse> {
-    return this.request.post(`${this.baseUrl}${endpoint}`, { data });
+    return this.request.post(`${this.baseUrl}${endpoint}`, {
+      data,
+      headers: this.headers,
+    });
   }
 
   /**
@@ -45,7 +56,10 @@ export class ApiClient {
    * @param data - request body, sent as JSON
    */
   async put(endpoint: string, data: object): Promise<APIResponse> {
-    return this.request.put(`${this.baseUrl}${endpoint}`, { data });
+    return this.request.put(`${this.baseUrl}${endpoint}`, {
+      data,
+      headers: this.headers,
+    });
   }
 
   /**
@@ -55,7 +69,10 @@ export class ApiClient {
    * @param data - request body, sent as JSON
    */
   async patch(endpoint: string, data: object): Promise<APIResponse> {
-    return this.request.patch(`${this.baseUrl}${endpoint}`, { data });
+    return this.request.patch(`${this.baseUrl}${endpoint}`, {
+      data,
+      headers: this.headers,
+    });
   }
 
   /**
@@ -63,6 +80,8 @@ export class ApiClient {
    * @param endpoint - path relative to the baseUrl
    */
   async delete(endpoint: string): Promise<APIResponse> {
-    return this.request.delete(`${this.baseUrl}${endpoint}`);
+    return this.request.get(`${this.baseUrl}${endpoint}`, {
+      headers: this.headers,
+    });
   }
 }
