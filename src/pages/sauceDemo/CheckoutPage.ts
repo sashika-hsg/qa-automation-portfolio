@@ -25,9 +25,12 @@ export class CheckoutPage extends BasePage {
   //Step 2 - overview
   private readonly finishButton = this.page.locator('[data-test ="finish"]');
   private readonly totalLabel = this.page.locator('.summary_total_label');
+  private readonly itemPrices = this.page.locator('.inventory_item_price');
+  private readonly subTotalLabel = this.page.locator('.summary_subtotal_label');
+  private readonly taxLabel = this.page.locator('.summary_tax_label');
 
   //Step 3 - order confirmation
-  private readonly completeHeader = this.page.locator('complete-header');
+  private readonly completeHeader = this.page.locator('.complete-header');
   private readonly backHomeButton = this.page.locator(
     '[data-test="back-to-products"]'
   );
@@ -79,9 +82,36 @@ export class CheckoutPage extends BasePage {
   /**
    * Get the order total text from the overview step.
    */
-  async getTotal(): Promise<string> {
+  async getTotalText(): Promise<string> {
     return this.totalLabel.innerText();
   }
+  /**
+   * Get Subtotal (item total) from the overview page.
+   * Returns the numeric value without the dollar sign
+   */
+  async getSubtotal(): Promise<number> {
+    const subTotalText = await this.subTotalLabel.innerText();
+    const priceMatch = subTotalText.match(/\$([\d.]+)/);
+    return priceMatch ? parseFloat(priceMatch[1]) : 0;
+  }
+
+  /**
+   * Get the tax amount from the overview page as a numeric value
+   */
+  async getTax(): Promise<number> {
+    const taxText = await this.taxLabel.innerText();
+    const taxMatch = taxText.match(/\$([\d.]+)/);
+    return taxMatch ? parseFloat(taxMatch[1]) : 0;
+  }
+  /**
+   * Get the total amount from the overview page as a numeric value
+   */
+  async getTotalAmount(): Promise<number> {
+    const totalText = await this.totalLabel.innerText();
+    const totalMatch = totalText.match(/\$([\d.]+)/);
+    return totalMatch ? parseFloat(totalMatch[1]) : 0;
+  }
+
   /**
    * Click finish on the overview step.
    */
