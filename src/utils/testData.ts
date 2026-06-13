@@ -40,6 +40,9 @@ export const EXPECTED_MESSAGES = {
   INVALID_CREDENTIALS_ERROR: 'Username and password do not match',
   MISSING_USERNAME_ERROR: 'Username is required',
   MISSING_PASSWORD_ERROR: 'Password is required',
+  MISSING_FIRST_NAME_ERROR: 'Error: First Name is required',
+  MISSING_LAST_NAME_ERROR: 'Error: Last Name is required',
+  MISSING_POSTAL_CODE_ERROR: 'Error: Postal Code is required',
 } as const;
 
 export const CHECKOUT_DATA = {

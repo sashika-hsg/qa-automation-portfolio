@@ -21,7 +21,7 @@ export class LoginPage extends BasePage {
    * Navigate to Sauce Demo login page.
    */
   async navigate(): Promise<void> {
-    await this.page.goto('https://saucedemo.com');
+    await this.page.goto('/');
     await this.waitForPageLoad();
   }
   /**
