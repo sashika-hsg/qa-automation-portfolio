@@ -26,7 +26,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      # TODO: enable in Phase 5 once src/db/seed/seed.ts exists
       - name: Seed database
+        if: false
         run: npm run db:seed
 
       - name: Run UI tests
@@ -42,17 +44,24 @@ jobs:
         run: npm run test:api
         env:
           REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
           RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
 
+      # TODO: enable in Phase 8 once tests/api/graphql/*.spec.ts exists
       - name: Run GraphQL tests
+        if: false
         run: npm run test:graphql
         env:
           GRAPHQL_POKEMON_URL: ${{ secrets.GRAPHQL_POKEMON_URL }}
 
+      # TODO: enable in Phase 5 once tests/db/*.spec.ts exists
       - name: Run database tests
+        if: false
         run: npm run test:db
 
+      # TODO: enable in Phase 6 once tests/accessibility/*.spec.ts exists
       - name: Run accessibility tests
+        if: false
         run: npm run test:accessibility
         env:
           SAUCE_DEMO_BASE_URL: ${{ secrets.SAUCE_DEMO_BASE_URL }}
@@ -60,9 +69,12 @@ jobs:
           SAUCE_DEMO_PASSWORD: ${{ secrets.SAUCE_DEMO_PASSWORD }}
 
       - name: Install Newman
+        if: false
         run: npm install -g newman newman-reporter-htmlextra
 
+      # TODO: enable in Phase 9 once postman/collections/*.json exists
       - name: Run Newman tests
+        if: false
         run: npm run test:newman
         env:
           REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
