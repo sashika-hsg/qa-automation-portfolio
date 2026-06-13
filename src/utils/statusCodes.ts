@@ -1,0 +1,16 @@
+/**
+ * HTTP status codes used across API tests.
+ * Centralised to avoid magic numbers and improve readability.
+ *
+ * Reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+ */
+export const STATUS_CODES = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+} as const;
