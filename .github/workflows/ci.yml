@@ -107,6 +107,7 @@ jobs:
         run: npm run test:api
         env:
           REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
+          REQRES_API_KEY: ${{secrets.REQRES_API_KEY}}
           RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
 
       - name: Run GraphQL tests
