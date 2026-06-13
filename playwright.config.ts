@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from 'dotenv';
+import { BASE_URLS } from './src/config/urls';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ export default defineConfig({
   ],
 
   use: {
-    baseURL: process.env.SAUCE_DEMO_BASE_URL ?? 'https://www.saucedemo.com',
+    baseURL: BASE_URLS.SAUCE_DEMO ?? 'https://www.saucedemo.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'on-first-retry',
