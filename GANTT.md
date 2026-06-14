@@ -52,12 +52,12 @@ gantt
 | CI | GitHub Actions | 1 | Day 3 | Day 3 | ✅ Complete |
 | 1 | TypeScript A+ | 3 | Day 4 | Day 6 | ✅ Complete |
 | 2 | QA Lifecycle + UX | 2 | Day 7 | Day 8 | ✅ Complete |
-| 3 | SQL A+ | 5 | Day 9 | Day 13 | 🔄 In progress |
+| 3 | SQL A+ | 5 | Day 9 | Day 13 | 🔄 In progress — Levels 1-5 done, Level 6 pending |
 | 4 | Design Patterns | 4 | Day 14 | Day 17 | ⏳ Not started |
 | 5 | Database Layer | 2 | Day 18 | Day 19 | ⏳ Not started |
-| 6 | UI Automation | 4 | Day 20 | Day 23 | 🔄 In progress  |
+| 6 | UI Automation | 4 | Day 20 | Day 23 | ✅ Done early — 25 tests, 3 browsers, data-driven coverage |
 | 7 | BDD for UI | 3 | Day 24 | Day 26 | ⏳ Not started |
-| 8 | API + GraphQL | 5 | Day 27 | Day 31 | ⏳ Not started |
+| 8 | API + GraphQL | 5 | Day 25 | Day 30 | 🔄 Started early — ReqRes CRUD + schema validation done (7 tests) |
 | 9 | Postman + Newman | 2 | Day 32 | Day 33 | ⏳ Not started |
 | 10 | AI Integration | 2 | Day 34 | Day 35 | ⏳ Not started |
 | 11 | CI/CD + CloudWatch | 2 | Day 36 | Day 37 | ⏳ Not started |

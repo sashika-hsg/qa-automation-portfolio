@@ -263,10 +263,9 @@ Every push triggers the CI pipeline automatically.
 | Job | Runs when | What it checks |
 | --- | --- | --- |
 | Quality Checks | Every push to every branch | TypeScript + ESLint |
-| UI Tests | PR to main or push to main | Full UI suite |
-| API Tests | PR to main or push to main | REST + GraphQL |
-| Database Tests | PR to main or push to main | DB validation |
-| Newman Tests | PR to main or push to main | Postman collections |
+| UI Tests | PR to main or push to main | UI suite — chromium, firefox, webkit |
+| API Tests | PR to main or push to main | ReqRes REST API |
+| GraphQL / Database / Newman | — | ⊘ Skipped — pending Phases 5, 8, 9 |
 | Quality Gate | After all jobs | Fails if any job fails |
 | Nightly Regression | Every night at midnight | Full suite |
 
@@ -311,7 +310,14 @@ alternatives considered, and consequences.
 | Suite | File | Tests | Status |
 | --- | --- | --- | --- |
 | Sauce Demo Login | `tests/ui/sauceDemo/login.spec.ts` | 6 | ✅ Passing |
+| Sauce Demo Inventory | `tests/ui/sauceDemo/inventory.spec.ts` | 10 | ✅ Passing |
+| Sauce Demo Checkout | `tests/ui/sauceDemo/checkout.spec.ts` | 6 | ✅ Passing |
+| Sauce Demo Data-Driven Login | `tests/ui/sauceDemo/dataDriven.spec.ts` | 3 | ✅ Passing |
+| ReqRes Users API | `tests/api/reqres/users.spec.ts` | 7 | ✅ Passing |
 
+All UI suites run across chromium, firefox, and webkit.
+CI pipeline (Quality Checks, UI Tests, API Tests, Quality Gate) is green.
+Nightly regression also passing.
 More suites are added daily — see commit history for progress.
 
 ---
