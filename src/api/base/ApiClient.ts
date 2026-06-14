@@ -29,6 +29,17 @@ export class ApiClient {
   }
 
   /**
+   * Set uor update a single header - used for adding auth tokens
+   * after authentication, since headers are otherwise fixed
+   * at construction time.
+   * @param key - header name (ex: 'Cookie', 'Authorization')
+   * @param value - header value
+   */
+  setHeader(key: string, value: string): void {
+    this.headers[key] = value;
+  }
+
+  /**
    * Perform a GET request.
    * @param endpoint - path relative to the baseUrl (ex: '/api/user/2' )
    */
