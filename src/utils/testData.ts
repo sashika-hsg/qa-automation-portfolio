@@ -83,3 +83,43 @@ export const REQRES_TEST_USER = {
   UPDATED_JOB_FULL: 'Senior QA Engineer',
   UPDATED_JOB_PARTIAL: 'QA Lead',
 } as const;
+
+/**
+ * Test credentials for Restful Booker — these are the standard
+ * public sandbox credentials documented at restful-booker.herokuapp.com
+ */
+export const RESTFUL_BOOKER_AUTH = {
+  USERNAME: 'admin',
+  PASSWORD: 'password123',
+} as const;
+
+/**
+ * Test data for Restful Booker booking CRUD tests.
+ */
+export const RESTFUL_BOOKER_BOOKING = {
+  VALID: {
+    firstname: 'Jane',
+    lastname: 'Doe',
+    totalprice: 150,
+    depositpaid: true,
+    bookingdates: {
+      checkin: '2026-07-01',
+      checkout: '2026-07-10',
+    },
+    additionalneeds: 'Breakfast',
+  },
+  UPDATED: {
+    firstname: 'Janet',
+    lastname: 'Smith',
+    totalprice: 200,
+    depositpaid: false,
+    bookingdates: {
+      checkin: '2026-08-01',
+      checkout: '2026-08-10',
+    },
+    additionalneeds: 'Lunch',
+  },
+  PARTIAL_UPDATE: {
+    firstname: 'Janice',
+  },
+} as const;
