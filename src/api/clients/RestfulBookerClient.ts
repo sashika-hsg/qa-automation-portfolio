@@ -3,7 +3,7 @@ import { ApiClient } from '@api/base/ApiClient';
 import { BASE_URLS } from '@config/urls';
 
 /**
- * Bookingdata shape used for create/update requests.
+ * Bookingdata type used for create/update requests.
  */
 export type BookingData = {
   firstname: string;
@@ -33,6 +33,15 @@ export class RestfulBookerClient extends ApiClient {
   constructor(request: APIRequestContext) {
     super(request, BASE_URLS.RESTFUL_BOOKER, {});
   }
+  /**
+   * Send an aunthentication request and return the raw response
+   * Useful for testing the /auth endpoint itself.
+   * @param username - Restful Booker admin username
+   * @param password - Restful Booker admin password
+   */
+  async login(username: string, password: string): Promise<APIResponse> {
+    return this.post(`/auth`, { username, password });
+  }
 
   /**
    * Authenticate and store the token as a cookie header for
@@ -41,9 +50,8 @@ export class RestfulBookerClient extends ApiClient {
    * @param password - Restful Booker admin password
    */
   async authenticate(username: string, password: string): Promise<void> {
-    const response = await this.post('/auth', { username, password });
+    const response = await this.login(username, password);
     const responseBody = await response.json();
-
     this.setHeader('Cookie', `token=${responseBody.token}`);
   }
 
@@ -60,7 +68,7 @@ export class RestfulBookerClient extends ApiClient {
    * @param id - booking ID
    */
   async getBookingById(id: number): Promise<APIResponse> {
-    return this.get(`/bookings/${id}`);
+    return this.get(`/booking/${id}`);
   }
 
   /**
