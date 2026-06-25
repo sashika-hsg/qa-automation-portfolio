@@ -4,7 +4,8 @@
 > senior QA engineering and SDET capabilities across UI, API, database,
 > security, performance, accessibility, and AI-powered testing.
 
-[![CI Pipeline](https://github.com/YOUR_USERNAME/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/qa-automation-portfolio/actions/workflows/ci.yml)
+[![CI Pipeline](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/ci.yml)
+[![Nightly Regression](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/nightly.yml/badge.svg)](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/nightly.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 [![Playwright](https://img.shields.io/badge/Playwright-1.44+-purple.svg)](https://playwright.dev/)
@@ -21,37 +22,39 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 ## Project Status
 
-| Version | Status | Phases | Focus |
-| --- | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — Day 10 of 43 | 14 phases | Core automation framework |
-| **v2 — Planned** | ⏳ Not started | 10 phases | Advanced tooling and cloud |
+## Project Status
+
+| Version | Status | Focus |
+| --- | --- | --- |
+| **v1 — Current** | 🔄 In progress — 40 tests passing, UI complete, API testing underway | Core automation framework |
+| **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
 
 ## What This Project Demonstrates
 
-This is not a tutorial project. Every design decision is intentional,
-documented, and explainable. Built to showcase the full skillset
-expected of a Senior QA Engineer or SDET.
+This is not a tutorial project. Every design decision is intentional, documented, and explainable. Built to showcase the full skillset expected of a Senior QA Engineer or SDET.
 
 | Skill | Tool | Status |
 | --- | --- | --- |
-| UI automation | Playwright + POM | 🔄 In progress — login suite passing |
-| API testing — REST | Playwright request context | 🔄 Phase 8 |
-| API testing — GraphQL | Playwright + GraphQLClient | 🔄 Phase 8 |
-| BDD | Cucumber.js + Gherkin | 🔄 Phase 7 |
-| Database validation | SQLite + Repository pattern | 🔄 Phase 5 |
-| Schema validation | AJV | 🔄 Phase 8 |
-| Security testing | Custom security spec | 🔄 Phase 8 |
-| Performance testing | k6 | 🔄 Phase 8 |
-| Accessibility testing | axe-core | 🔄 Phase 6 |
-| Visual regression | Playwright screenshots | 🔄 Phase 6 |
-| Mobile testing | Playwright viewport | 🔄 Phase 6 |
-| API collections | Postman + Newman | 🔄 Phase 9 |
-| AI integration | Claude API | 🔄 Phase 10 |
-| CI/CD pipeline | GitHub Actions | ✅ Complete |
-| Cloud monitoring | AWS CloudWatch | 🔄 Phase 11 |
-| Reporting | Allure + Playwright HTML | 🔄 Phase 11 |
+| UI automation | Playwright + POM | ✅ 25 tests, 3 browsers (chromium, firefox, webkit) |
+| API testing — REST | Playwright request context + AJV | ✅ ReqRes + Restful Booker, 15 tests |
+| Authentication flows | Static API key + cookie-based token | ✅ Both implemented |
+| API testing — GraphQL | Playwright + GraphQLClient | ⏳ Phase 8 — pending |
+| BDD | Cucumber.js + Gherkin | ⏳ Phase 7 |
+| Database validation | SQLite + Repository pattern | ⏳ Phase 5 |
+| SQL | Joins, subqueries, aggregation, constraints | 🔄 Levels 1-5 complete, Level 6 in progress |
+| Schema validation | AJV | ✅ Implemented across all API tests |
+| Security testing | Custom security spec | ⏳ Phase 8 |
+| Performance testing | k6 | ⏳ Phase 8 |
+| Accessibility testing | axe-core | ⏳ Phase 6 |
+| Visual regression | Playwright screenshots | ⏳ Phase 6 |
+| Mobile testing | Playwright viewport | ⏳ Phase 6 |
+| API collections | Postman + Newman | ⏳ Phase 9 |
+| AI integration | Claude API | ⏳ Phase 10 |
+| CI/CD pipeline | GitHub Actions — 2 workflows, branch protection, auto-merge | ✅ Complete |
+| Cloud monitoring | AWS CloudWatch | ⏳ Phase 11 |
+| Reporting | Allure + Playwright HTML | ⏳ Phase 11 |
 
 ---
 
@@ -59,15 +62,15 @@ expected of a Senior QA Engineer or SDET.
 
 Every pattern is justified — not just used for the sake of it.
 
-| Pattern | Where applied | Problem it solves |
-| --- | --- | --- |
-| Page Object Model | `src/pages/` | Selector abstraction — one change point |
-| Singleton | `ConfigManager`, `DatabaseConnection` | One source of truth for shared resources |
-| Factory | `PageFactory`, `ApiClientFactory` | Decouples object creation from test logic |
-| Builder | `UserBuilder`, `BookingBuilder` | Readable, flexible test data construction |
-| Strategy | `playwright.config.ts` projects | Pluggable browser selection |
-| Repository | `src/db/repositories/` | DB engine agnostic data access |
-| Chain of Responsibility | `src/api/handlers/` | Composable API middleware |
+| Pattern | Where applied | Status | Problem it solves |
+| --- | --- | --- | --- |
+| Page Object Model | `src/pages/` | ✅ Implemented | Selector abstraction — one change point |
+| Custom Fixtures (Factory) | `src/fixtures/fixtures.ts` | ✅ Implemented | Pre-configured page/auth state injected into tests |
+| Inheritance | `ApiClient` → `ReqResClient`, `RestfulBookerClient` | ✅ Implemented | Shared HTTP methods, endpoint-specific logic in subclasses |
+| Strategy | `playwright.config.ts` projects | ✅ Implemented | Pluggable browser selection (chromium/firefox/webkit) |
+| Singleton | `ConfigManager`, `DatabaseConnection` | ⏳ Planned | One source of truth for shared resources |
+| Builder | `UserBuilder`, `BookingBuilder` | ⏳ Planned | Readable, flexible test data construction |
+| Repository | `src/db/repositories/` | ⏳ Planned | DB engine agnostic data access |
 
 ---
 
