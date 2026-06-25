@@ -3,7 +3,6 @@ import * as dotenv from 'dotenv';
 import { BASE_URLS } from './src/config/urls';
 
 dotenv.config();
-
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
@@ -12,7 +11,13 @@ export default defineConfig({
   workers: process.env.CI ? 2 : 1,
 
   reporter: [
-    ['html', { outputFolder: 'reports/playwright-html', open: 'never' }],
+    [
+      'html',
+      {
+        outputFolder: `reports/${process.env.TEST_SUITE ?? 'playwright'}-html`,
+        open: 'never',
+      },
+    ],
     ['list'],
   ],
 
