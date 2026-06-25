@@ -47,9 +47,7 @@ jobs:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
           RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
 
-      # TODO: enable in Phase 8 once tests/api/graphql/*.spec.ts exists
       - name: Run GraphQL tests
-        if: false
         run: npm run test:graphql
         env:
           GRAPHQL_POKEMON_URL: ${{ secrets.GRAPHQL_POKEMON_URL }}
