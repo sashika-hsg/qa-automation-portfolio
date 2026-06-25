@@ -43,8 +43,8 @@ test.describe('Restful Booker - Booking API', () => {
     expect(respnse.status()).toBe(STATUS_CODES.OK);
     const responseBody = await respnse.json();
     const valdateAuthSchema = ajv.compile(authResponseSchema);
-    const isSchemValid = valdateAuthSchema(responseBody);
-    expect(isSchemValid).toBe(true);
+    const isSchemeValid = valdateAuthSchema(responseBody);
+    expect(isSchemeValid).toBe(true);
   });
 
   test('create a new booking with valid schema @smoke @critical', async ({
@@ -74,8 +74,8 @@ test.describe('Restful Booker - Booking API', () => {
 
     const responseBody = await response.json();
     const validateBookingSchema = ajv.compile(bookingSchema);
-    const isSchemValid = validateBookingSchema(responseBody);
-    expect(isSchemValid).toBe(true);
+    const isSchemeValid = validateBookingSchema(responseBody);
+    expect(isSchemeValid).toBe(true);
     expect(responseBody.firstname).toBe(RESTFUL_BOOKER_BOOKING.VALID.firstname);
   });
 
