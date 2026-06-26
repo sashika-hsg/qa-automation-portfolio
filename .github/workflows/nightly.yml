@@ -69,7 +69,7 @@ jobs:
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
       - name: Run Newman tests
-        run: npm run test:newman
+        run: npm run test:newman:ci
         env:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
       - name: Upload full report
