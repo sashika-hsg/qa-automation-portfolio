@@ -16,3 +16,4 @@ PROGRESS.md
 src/utils/TypeScriptPlayground.ts
 .env
 postman/environments
+!postman/environments/*.ci.json
