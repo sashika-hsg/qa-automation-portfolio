@@ -1,0 +1,411 @@
+{
+  "info": {
+    "_postman_id": "91b3496c-f7f8-49c8-b3d1-6c0fcc1c8efa",
+    "name": "ReqRes API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53101215",
+    "_collection_link": "https://go.postman.co/collection/53101215-91b3496c-f7f8-49c8-b3d1-6c0fcc1c8efa?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get User List",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//Status codecheck\r",
+              "pm.test(\"Status code is 200\", function(){\r",
+              " pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "//Response time check \r",
+              "pm.test(\"Reponse time is less than 2000ms\",function(){\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "//Schema validation\r",
+              "pm.test(\"Response has page and data fields\",function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"page\");\r",
+              "    pm.expect(body).to.have.property(\"data\");\r",
+              "    pm.expect(Array.isArray(body.data)).to.be.true;\r",
+              "    pm.expect(body.data.length).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "//Data field validation\r",
+              "pm.test(\"Each user has id, email, first_name and last_name\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    body.data.forEach(function(user){\r",
+              "        pm.expect(user).to.have.property(\"id\");\r",
+              "        pm.expect(user).to.have.property(\"email\");\r",
+              "        pm.expect(user).to.have.property(\"first_name\");\r",
+              "        pm.expect(user).to.have.property(\"last_name\");\r",
+              "    });\r",
+              "});\r",
+              "//Store first user id in environment variable for later user\r",
+              "pm.test(\"Store first user id\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.environment.set(\"user_id\", body.data[0].id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users?page=1",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Single User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "//Statuscode check\r",
+              "pm.test(\"Status code is 200\", function(){\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "//Reposne time check\r",
+              "pm.test(\"Response time is less than 2000ms\", function(){\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);  \r",
+              "});\r",
+              "\r",
+              "//Schema validation\r",
+              "pm.test(\"Response has data, support and _meta fields\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"data\");\r",
+              "    pm.expect(body).to.have.property(\"support\");\r",
+              "    pm.expect(body).to.have.property(\"_meta\");\r",
+              "});\r",
+              "\r",
+              "//User field validation\r",
+              "pm.test(\"User has required fields\", function(){\r",
+              "    const user = pm.response.json().data;\r",
+              "    pm.expect(user).to.have.property(\"id\");\r",
+              "    pm.expect(user).to.have.property(\"email\");\r",
+              "    pm.expect(user).to.have.property(\"first_name\");\r",
+              "    pm.expect(user).to.have.property(\"last_name\");\r",
+              "});\r",
+              "\r",
+              "//User ID matches with the request user_id\r",
+              "pm.test(\"Returned user ID matches request user ID\", function(){\r",
+              "    const user = pm.response.json().data;\r",
+              "    pm.expect(user.id).to.equal(pm.environment.get(\"user_id\"));\r",
+              "});\r",
+              "\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//Status code check\r",
+              "pm.test(\"Status code is 201\", function(){\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "//Respone time check\r",
+              "pm.test(\"Response time is less than 2000ms\", function(){\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "//Schema validation\r",
+              "pm.test(\"Response has required fields\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"name\");\r",
+              "    pm.expect(body).to.have.property(\"job\");\r",
+              "    pm.expect(body).to.have.property(\"id\");\r",
+              "    pm.expect(body).to.have.property(\"createdAt\");\r",
+              "    pm.expect(body).to.have.property(\"_meta\");\r",
+              "});\r",
+              "\r",
+              "//Filed value validation\r",
+              "pm.test(\"Returned name and job matches request body\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.name.trim()).to.eql(pm.environment.get(\"user_name\"));\r",
+              "    pm.expect(body.job.trim()).to.eql(pm.environment.get(\"user_job\"));\r",
+              "});\r",
+              "//Store the created uer ID\r",
+              "pm.test(\"Store created ID\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.environment.set(\"user_id\",body.id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\":\" {{user_name}}\",\r\n    \"job\" : \"{{user_job}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//Statusc code is 200\r",
+              "pm.test(\"Stauts code is returned as 200\", function(){\r",
+              "    pm.expect(pm.response).to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "//Response time below 2000ms\r",
+              "pm.test(\"Response time to be below 2000ms\", function(){\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "//Schema validation\r",
+              "pm.test(\"Response has required fields\",function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body).to.have.property(\"name\");\r",
+              "    pm.expect(body).to.have.property(\"job\");\r",
+              "    pm.expect(body).to.have.property(\"updatedAt\");\r",
+              "    pm.expect(body).to.have.property(\"_meta\");\r",
+              "});\r",
+              "\r",
+              "//Field value validation- compare against \r",
+              "pm.test(\"Returned name and job matches the updated values\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.name.trim()).to.eql(pm.environment.get(\"user_name\"));\r",
+              "    pm.expect(body.job.trim()).to.eql(pm.environment.get(\"user_new_job\"));\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"{{user_name}}\",\r\n    \"job\" :\"{{user_new_job}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//Status code 204 is returned\r",
+              "pm.test(\"Status code 204 is returned\",function(){\r",
+              "    pm.response.to.have.status(204);\r",
+              "});\r",
+              "\r",
+              "//Response time is below 2000ms\r",
+              "pm.test(\"Response time is below 2000ms\",function(){\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "//Response body is empty\r",
+              "pm.test(\"Response body is empty\",function(){\r",
+              "    pm.expect(pm.response.text()).to.be.empty;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/{{user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{user_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Non Existent User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//Status code 400\r",
+              "pm.test(\"Status code 404 returned\", function(){\r",
+              "    pm.response.to.have.status(404);\r",
+              "});\r",
+              "\r",
+              "//Response time check\r",
+              "pm.test(\"Respinse time is less than 2000ms\", function(){\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});\r",
+              "\r",
+              "//Response body should be empty\r",
+              "pm.test(\"Response body is empty\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(Object.keys(body).length).to.eql(0);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/users/{{non_exist_user_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{non_exist_user_id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
