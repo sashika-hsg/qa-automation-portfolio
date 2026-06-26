@@ -67,17 +67,11 @@ jobs:
           SAUCE_DEMO_PASSWORD: ${{ secrets.SAUCE_DEMO_PASSWORD }}
 
       - name: Install Newman
-        if: false
         run: npm install -g newman newman-reporter-htmlextra
-
-      # TODO: enable in Phase 9 once postman/collections/*.json exists
       - name: Run Newman tests
-        if: false
         run: npm run test:newman
         env:
-          REQRES_BASE_URL: ${{ secrets.REQRES_BASE_URL }}
-          RESTFUL_BOOKER_BASE_URL: ${{ secrets.RESTFUL_BOOKER_BASE_URL }}
-
+          REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
       - name: Upload full report
         uses: actions/upload-artifact@v4
         if: always()
