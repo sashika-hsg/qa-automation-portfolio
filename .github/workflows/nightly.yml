@@ -10,6 +10,21 @@ jobs:
     name: Full Regression Suite
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: qa_user
+          POSTGRES_PASSWORD: qa_password
+          POSTGRES_DB: qa_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,10 +41,14 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      # TODO: enable in Phase 5 once src/db/seed/seed.ts exists
       - name: Seed database
-        if: false
         run: npm run db:seed
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: qa_user
+          DB_PASSWORD: qa_password
+          DB_NAME: qa_db
 
       - name: Run UI tests
         run: npm run test:ui
@@ -52,12 +71,15 @@ jobs:
         env:
           GRAPHQL_POKEMON_URL: ${{ secrets.GRAPHQL_POKEMON_URL }}
 
-      # TODO: enable in Phase 5 once tests/db/*.spec.ts exists
       - name: Run database tests
-        if: false
         run: npm run test:db
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USER: qa_user
+          DB_PASSWORD: qa_password
+          DB_NAME: qa_db
 
-      # TODO: enable in Phase 6 once tests/accessibility/*.spec.ts exists
       - name: Run accessibility tests
         if: false
         run: npm run test:accessibility
@@ -68,10 +90,12 @@ jobs:
 
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
+
       - name: Run Newman tests
         run: npm run test:newman:ci
         env:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
+
       - name: Upload full report
         uses: actions/upload-artifact@v4
         if: always()

@@ -123,3 +123,33 @@ export const RESTFUL_BOOKER_BOOKING = {
     firstname: 'Janice',
   },
 } as const;
+/**
+ * Test data for Database layer tests.
+ * Matches the seed data inserted by src/db/seed/seed.ts
+ */
+export const DB_USERS = {
+  SEEDED_COUNT: 3,
+  JANE: {
+    name: 'Jane Doe',
+    job: 'QA Engineer',
+  },
+  JOHN: {
+    name: 'John Smith',
+    job: 'Software Engineer',
+  },
+  ALICE: {
+    name: 'Alice Brown',
+    job: 'Product Manager',
+  },
+  NEW_USER: {
+    name: 'Test User',
+    job: 'Test Engineer',
+  },
+  DELETE_USER: {
+    name: 'Delete Me',
+    job: 'Temporary',
+  },
+  NON_EXISTENT: {
+    name: 'Non Existent User',
+  },
+} as const;
