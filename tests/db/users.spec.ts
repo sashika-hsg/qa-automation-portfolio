@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { UserRepository } from '@db/repositories/userRepository';
 import { DbClient } from '@db/client';
 import { DB_USERS } from '@utils/testData';
+import { UserBuilder } from '@builders/UserBuilder';
 
 /**
  * Database layer tests - users table.
@@ -49,10 +50,8 @@ test.describe('Database - Users Table', () => {
 
   //--Write operations--
   test('Insert a new record and return the created record @regression @db', async () => {
-    const created = await UserRepository.create(
-      DB_USERS.NEW_USER.name,
-      DB_USERS.NEW_USER.job
-    );
+    const newUser = new UserBuilder().build();
+    const created = await UserRepository.create(newUser.name, newUser.job);
     expect(created.name).toBe(DB_USERS.NEW_USER.name);
     expect(created.job).toBe(DB_USERS.NEW_USER.job);
     expect(created.id).toBeTruthy();
@@ -67,15 +66,13 @@ test.describe('Database - Users Table', () => {
   });
 
   test('delete a user by name @regression @db', async () => {
-    await UserRepository.create(
-      DB_USERS.DELETE_USER.name,
-      DB_USERS.DELETE_USER.job
-    );
-    const before = await UserRepository.getByName(DB_USERS.DELETE_USER.name);
+    const tempUser = new UserBuilder().asTemporaryUser().build();
+    await UserRepository.create(tempUser.name, tempUser.job);
+    const before = await UserRepository.getByName(tempUser.name);
     expect(before).not.toBeNull();
 
-    await UserRepository.deleteByName(DB_USERS.DELETE_USER.name);
-    const after = await UserRepository.getByName(DB_USERS.DELETE_USER.name);
+    await UserRepository.deleteByName(tempUser.name);
+    const after = await UserRepository.getByName(tempUser.name);
     expect(after).toBeNull();
   });
   //---Schema Validation---
