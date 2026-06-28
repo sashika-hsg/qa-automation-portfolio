@@ -8,6 +8,7 @@ import {
 } from '../../../src/api/schemas/bookingSchema';
 import { STATUS_CODES } from '@utils/statusCodes';
 import { RESTFUL_BOOKER_AUTH, RESTFUL_BOOKER_BOOKING } from '@utils/testData';
+import { BookingBuilder } from '@builders/BookingBuilder';
 
 const ajv = new Ajv();
 
@@ -21,7 +22,8 @@ test.describe('Restful Booker - Booking API', () => {
    */
   test.beforeEach(async ({ request }) => {
     const client = new RestfulBookerClient(request);
-    const response = await client.createBooking(RESTFUL_BOOKER_BOOKING.VALID);
+    const booking = new BookingBuilder().build();
+    const response = await client.createBooking(booking);
     const responseBody = await response.json();
     bookingId = responseBody.bookingid;
     // Restful Booker's sandbox can have eventual-consistency delays —
@@ -51,18 +53,17 @@ test.describe('Restful Booker - Booking API', () => {
     request,
   }) => {
     const client = new RestfulBookerClient(request);
-    const respnse = await client.createBooking(RESTFUL_BOOKER_BOOKING.VALID);
-    expect(respnse.status()).toBe(STATUS_CODES.OK);
+    const booking = new BookingBuilder().build();
+    const response = await client.createBooking(booking);
+    expect(response.status()).toBe(STATUS_CODES.OK);
 
-    const responseBody = await respnse.json();
+    const responseBody = await response.json();
     const validateCreateBookingResponseSchema = ajv.compile(
       createBookingResponseSchema
     );
     const isValidSchema = validateCreateBookingResponseSchema(responseBody);
     expect(isValidSchema).toBe(true);
-    expect(responseBody.booking.firstname).toBe(
-      RESTFUL_BOOKER_BOOKING.VALID.firstname
-    );
+    expect(responseBody.booking.firstname).toBe(booking.firstname);
   });
 
   test('get a booking by id with valid schema @smoke @critical', async ({
@@ -76,7 +77,7 @@ test.describe('Restful Booker - Booking API', () => {
     const validateBookingSchema = ajv.compile(bookingSchema);
     const isSchemeValid = validateBookingSchema(responseBody);
     expect(isSchemeValid).toBe(true);
-    expect(responseBody.firstname).toBe(RESTFUL_BOOKER_BOOKING.VALID.firstname);
+    expect(responseBody.firstname).toBe(new BookingBuilder().build().firstname);
   });
 
   test('fully update a booking with a PUT when authenticated @regression', async ({
@@ -87,19 +88,22 @@ test.describe('Restful Booker - Booking API', () => {
       RESTFUL_BOOKER_AUTH.USERNAME,
       RESTFUL_BOOKER_AUTH.PASSWORD
     );
-    const response = await client.updateBooking(
-      bookingId,
-      RESTFUL_BOOKER_BOOKING.UPDATED
-    );
+    const updatedBooking = new BookingBuilder()
+      .withFirstName('Janet')
+      .withLastName('Smith')
+      .withTotalPrice(200)
+      .withDepositPaid(false)
+      .withCheckin('2026-08-01')
+      .withCheckout('2026-08-10')
+      .withAdditionalNeeds('Lunch')
+      .build();
+
+    const response = await client.updateBooking(bookingId, updatedBooking);
     expect(response.status()).toBe(STATUS_CODES.OK);
 
     const responseBody = await response.json();
-    expect(responseBody.firstname).toBe(
-      RESTFUL_BOOKER_BOOKING.UPDATED.firstname
-    );
-    expect(responseBody.totalprice).toBe(
-      RESTFUL_BOOKER_BOOKING.UPDATED.totalprice
-    );
+    expect(responseBody.firstname).toBe(updatedBooking.firstname);
+    expect(responseBody.totalprice).toBe(updatedBooking.totalprice);
   });
 
   test('partially update a booking with a PATCH when authenticated @regression', async ({
@@ -110,18 +114,13 @@ test.describe('Restful Booker - Booking API', () => {
       RESTFUL_BOOKER_AUTH.USERNAME,
       RESTFUL_BOOKER_AUTH.PASSWORD
     );
-    const response = await client.updateBooking(
-      bookingId,
-      RESTFUL_BOOKER_BOOKING.UPDATED
-    );
+    const partialUpdate = new BookingBuilder().withFirstName('Janice').build();
+
+    const response = await client.updateBooking(bookingId, partialUpdate);
     expect(response.status()).toBe(STATUS_CODES.OK);
     const responseBody = await response.json();
-    expect(responseBody.firstname).toBe(
-      RESTFUL_BOOKER_BOOKING.UPDATED.firstname
-    );
-    expect(responseBody.totalprice).toBe(
-      RESTFUL_BOOKER_BOOKING.UPDATED.totalprice
-    );
+    expect(responseBody.firstname).toBe(partialUpdate.firstname);
+    expect(responseBody.totalprice).toBe(partialUpdate.totalprice);
   });
 
   test('partially update a booking with PATCH when authenticated @regression', async ({
