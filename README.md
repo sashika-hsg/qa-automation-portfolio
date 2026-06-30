@@ -24,7 +24,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Focus |
 | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — 57 Playwright tests + 25 Newman assertions passing, green CI pipeline | Core automation framework |
+| **v1 — Current** | 🔄 In progress — 65 unique tests (195 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
@@ -35,13 +35,15 @@ This is not a tutorial project. Every design decision is intentional, documented
 
 | Skill | Tool | Status |
 | --- | --- | --- |
-| UI automation | Playwright + POM | ✅ 25 tests, 3 browsers (chromium, firefox, webkit) |
+| UI automation | Playwright + POM | ✅ 22 tests, 3 browsers (chromium, firefox, webkit) |
 | API testing — REST | Playwright request context + AJV | ✅ ReqRes + Restful Booker, 15 tests |
 | Authentication flows | Static API key + cookie-based token | ✅ Both implemented |
 | API testing — GraphQL | Playwright + custom GraphQLClient | ✅ 10 tests, Pokémon GraphQL API |
-| Database validation | PostgreSQL + Docker + Repository pattern | ✅ 7 tests, cross-validated against API |
+| Database validation | PostgreSQL + Docker + Repository pattern | ✅ 6 tests, cross-validated against API |
 | API collections | Postman + Newman | ✅ 25 assertions, CI-integrated |
+| Unit testing | Playwright test runner | ✅ 9 tests — framework code tested in isolation |
 | Schema validation | AJV | ✅ Implemented across all API tests |
+| TypeScript language depth | Generics, accessors, abstract classes, utility types | ✅ 8 core constructs implemented and test-covered |
 | BDD | Cucumber.js + Gherkin | ⏳ Phase 7 |
 | Security testing | Custom security spec | ⏳ Phase 8 |
 | Performance testing | k6 | ⏳ Phase 8 |
@@ -57,7 +59,7 @@ This is not a tutorial project. Every design decision is intentional, documented
 
 ## Design Patterns
 
-Every pattern is justified — not just used for the sake of it. See `docs/design/DESIGN_PATTERNS.md` for full justification of each decision.
+Every pattern is justified — not just used for the sake of it. Full reasoning, alternatives considered, and code examples are documented in [`docs/design/DESIGN_PATTERNS.md`](docs/design/DESIGN_PATTERNS.md).
 
 | Pattern | Where applied | Status | Problem it solves |
 | --- | --- | --- | --- |
@@ -67,7 +69,26 @@ Every pattern is justified — not just used for the sake of it. See `docs/desig
 | Strategy | `playwright.config.ts` projects | ✅ Implemented | Pluggable browser selection (chromium/firefox/webkit) |
 | Singleton | `src/db/client.ts` | ✅ Implemented | One shared PostgreSQL connection across all DB tests |
 | Repository | `src/db/repositories/userRepository.ts` | ✅ Implemented | DB engine agnostic data access — SQL isolated from tests |
-| Builder | `src/builders/BookingBuilder.ts`, `UserBuilder.ts` | ⏳ Planned | Readable, flexible test data construction |
+| Builder | `src/builders/BookingBuilder.ts`, `UserBuilder.ts` | ✅ Implemented | Readable, flexible test data construction with method chaining |
+
+The framework also documents an intentional **non-pattern decision** — `GraphQLClient` does not extend `ApiClient`, since GraphQL's single-endpoint POST-only transport makes REST method inheritance misleading. See the design patterns doc for the full reasoning.
+
+---
+
+## TypeScript Language Depth
+
+Beyond basic syntax, this framework deliberately exercises core TypeScript and OOP constructs — each implemented where it genuinely fits, not forced in for the sake of coverage.
+
+| Construct | Where applied |
+| --- | --- |
+| Abstract classes & methods | `BasePage` — every page object must implement `navigate()` and `assertPageLoaded()` |
+| Interfaces (`implements`) | `BasePage implements IPage` — compiler-enforced contract |
+| Error handling (`try/catch`, `throw`) | `ApiClient` — every HTTP method wraps failures with contextual error messages |
+| `switch/case` | `StatusCodeHandler` — maps HTTP status codes to categories |
+| `get`/`set` accessors | `BookingBuilder` — validated property access with custom errors |
+| Array methods (`filter`, `find`, `reduce`) | `DataUtils` — booking aggregation and search utilities |
+| Generic constraints (`<T extends object>`) | `UserRepository.query<T>()` — type-safe, reusable query method |
+| Utility types (`Pick`, `Omit`, `Required`, `Readonly`) | `Booking.ts` — derived types without duplicating the base interface |
 
 ---
 
@@ -145,6 +166,7 @@ npm run test:smoke
 
 | Command | What it runs |
 | --- | --- |
+| `npm run test:unit` | Unit tests — framework code in isolation |
 | `npm run test:ui` | All UI tests |
 | `npm run test:api` | All REST API tests (ReqRes + Restful Booker) |
 | `npm run test:graphql` | GraphQL tests (Pokémon API) |
@@ -175,9 +197,11 @@ Reports are generated per suite into separate folders:
 
 | Suite | Report location |
 | --- | --- |
+| unit tests | `reports/unit-html/` |
 | UI tests | `reports/ui-html/` |
 | API tests | `reports/api-html/` |
 | GraphQL tests | `reports/graphql-html/` |
+| Database tests | `reports/db-html/` |
 | Newman | `reports/newman/report.html` |
 
 ---
@@ -223,6 +247,8 @@ qa-automation-portfolio/
 │   │   └── restfulBooker/
 │   └── utils/
 ├── tests/
+│   ├── unit/
+│   │   └── builders/
 │   ├── ui/
 │   │   └── sauceDemo/
 │   ├── api/
@@ -254,6 +280,7 @@ Every push triggers the CI pipeline automatically.
 | Job | Runs when | What it checks |
 | --- | --- | --- |
 | Quality Checks | Every push to every branch | TypeScript compile + ESLint |
+| Unit Tests | Every push to every branch | Framework code in isolation — fastest fail-fast gate |
 | UI Tests | PR to main or push to main | UI suite — chromium, firefox, webkit |
 | API Tests | PR to main or push to main | ReqRes + Restful Booker + GraphQL |
 | Database Tests | PR to main or push to main | PostgreSQL validation via Docker service container |
@@ -276,7 +303,7 @@ This project includes the complete QA lifecycle — not just scripts.
 | Bug Report Template | `docs/qa-lifecycle/BUG_REPORT_TEMPLATE.md` | ✅ Complete |
 | Test Summary Report | `docs/qa-lifecycle/TEST_SUMMARY_REPORT.md` | ✅ Complete |
 | Usability Evaluation | `docs/usability/HEURISTICS_EVALUATION.md` | ✅ Complete |
-| Design Patterns | `docs/design/DESIGN_PATTERNS.md` | ⏳ In progress |
+| Design Patterns | `docs/design/DESIGN_PATTERNS.md` | ✅ Complete |
 
 ---
 
@@ -301,17 +328,18 @@ Every major technology decision is documented with context, alternatives conside
 
 | Suite | File | Tests | Tags | Status |
 | --- | --- | --- | --- | --- |
-| Sauce Demo Login | `tests/ui/sauceDemo/login.spec.ts` | 6 | @smoke @regression | ✅ Passing |
+| Sauce Demo Login | `tests/ui/sauceDemo/login.spec.ts` | 6 | @smoke @regression @negative | ✅ Passing |
 | Sauce Demo Inventory | `tests/ui/sauceDemo/inventory.spec.ts` | 10 | @smoke @regression | ✅ Passing |
-| Sauce Demo Checkout | `tests/ui/sauceDemo/checkout.spec.ts` | 6 | @smoke @regression | ✅ Passing |
+| Sauce Demo Checkout | `tests/ui/sauceDemo/checkout.spec.ts` | 6 | @smoke @regression @negative | ✅ Passing |
 | Sauce Demo Data-Driven Login | `tests/ui/sauceDemo/dataDriven.spec.ts` | 3 | @regression | ✅ Passing |
-| ReqRes Users API | `tests/api/reqres/users.spec.ts` | 7 | @smoke @regression @negative | ✅ Passing |
-| Restful Booker Bookings API | `tests/api/restfulBooker/bookings.spec.ts` | 8 | @smoke @regression @negative | ✅ Passing |
+| ReqRes Users API | `tests/api/reqres/users.spec.ts` | 7 | @smoke @critical @regression | ✅ Passing |
+| Restful Booker Bookings API | `tests/api/restfulBooker/bookings.spec.ts` | 8 | @smoke @regression @negative @critical | ✅ Passing |
 | Pokémon GraphQL API | `tests/api/graphql/pokemon.spec.ts` | 10 | @smoke @regression @negative @graphql | ✅ Passing |
-| Database — Users Table | `tests/db/users.spec.ts` | 7 | @smoke @regression @negative @db | ✅ Passing |
-| **Total** | | **57** | | ✅ All passing |
+| Database — Users Table | `tests/db/users.spec.ts` | 6 | @smoke @regression @negative @db | ✅ Passing |
+| BookingBuilder — Unit Tests | `tests/unit/builders/bookingBuilder.spec.ts` | 9 | @unit | ✅ Passing |
+| **Total (unique)** | | **65** | | ✅ All passing |
 
-All UI suites run across chromium, firefox, and webkit.
+UI suites (22 tests) run across chromium, firefox, and webkit — 195 total test executions in CI.
 Newman collection: 6 requests, 25 assertions — all passing in CI.
 CI pipeline and nightly regression both green.
 

@@ -16,11 +16,11 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky",
-    "test:unit": "playwright test tests/unit",
+    "test:unit": "cross-env TEST_SUITE=unit playwright test tests/unit",
     "test:ui": "cross-env TEST_SUITE=ui playwright test tests/ui",
     "test:api": "cross-env TEST_SUITE=api playwright test tests/api/reqres tests/api/restfulBooker",
     "test:graphql": "cross-env TEST_SUITE=graphql playwright test tests/api/graphql",
-    "test:db": "playwright test tests/db",
+    "test:db": "cross-env TEST_SUITE=db playwright test tests/db",
     "test:accessibility": "playwright test tests/accessibility",
     "test:security": "playwright test tests/api/security",
     "test:smoke": "playwright test --grep @smoke",
