@@ -22,7 +22,6 @@ export interface IPage {
    */
   navigate(): Promise<void>;
 
-
   /**
    * Get the current page title.
    */

@@ -186,5 +186,3 @@ export const BOOKING_BUILDER_CHAINED_TEST = {
   TOTAL_PRICE: 300,
   DEPOSIT_PAID: false,
 } as const;
-
-

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { DbClient } from '@db/client';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -10,7 +11,7 @@ import * as path from 'path';
  * -Tests need a known, preditacble database state
  * - Seeding ensures the same data exists before every test run
  */
-async function seed() {
+async function seed(): Promise<void> {
   const db = await DbClient.getInstance();
 
   console.log('Running migrations...');

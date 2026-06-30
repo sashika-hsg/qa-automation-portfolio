@@ -1,4 +1,5 @@
 import { DbClient } from '@db/client';
+import { DbUser } from '@builders/UserBuilder';
 
 /**
  * User repository - Repository patter.
@@ -16,7 +17,7 @@ export class UserRepository {
   /**
    * Get all users fromdatabase
    */
-  static async getAll(): Promise<any[]> {
+  static async getAll(): Promise<DbUser[]> {
     const db = await DbClient.getInstance();
     const result = await db.query('SELECT * FROM users ORDER BY id ASC');
     return result.rows;
@@ -56,7 +57,7 @@ export class UserRepository {
   /**
    * Get a single user by name.
    */
-  static async getByName(name: string): Promise<any | null> {
+  static async getByName(name: string): Promise<DbUser | null> {
     const db = await DbClient.getInstance();
     const result = await db.query('SELECT * FROM users WHERE name = $1', [
       name,
@@ -67,7 +68,7 @@ export class UserRepository {
   /**
    * Insert a new user and return the created record.
    */
-  static async create(name: string, job: string): Promise<any> {
+  static async create(name: string, job: string): Promise<DbUser> {
     const db = await DbClient.getInstance();
     const result = await db.query(
       'INSERT INTO users(name, job) VALUES ($1, $2) RETURNING *',
