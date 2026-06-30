@@ -153,3 +153,38 @@ export const DB_USERS = {
     name: 'Non Existent User',
   },
 } as const;
+
+/**
+ * Default values used by BookingBuilder.
+ * Single source of truth — if defaults change, update here only.
+ */
+export const BOOKING_BUILDER_DEFAULTS = {
+  FIRSTNAME: 'Jane',
+  LASTNAME: 'Doe',
+  TOTAL_PRICE: 150,
+  DEPOSIT_PAID: true,
+  CHECKIN: '2026-08-01',
+  CHECKOUT: '2026-08-10',
+  ADDITIONAL_NEEDS: 'Breakfast',
+} as const;
+
+export const BOOKING_BUILDER_PREMIUM = {
+  TOTAL_PRICE: 1500,
+  CHECKIN: '2026-09-01',
+  CHECKOUT: '2026-09-30',
+  ADDITIONAL_NEEDS: 'Breakfast, Lunch, Dinner, Spa',
+} as const;
+
+export const BOOKING_BUILDER_MINIMAL = {
+  TOTAL_PRICE: 100,
+  ADDITIONAL_NEEDS: '',
+} as const;
+
+export const BOOKING_BUILDER_CHAINED_TEST = {
+  FIRSTNAME: 'Alice',
+  LASTNAME: 'Smith',
+  TOTAL_PRICE: 300,
+  DEPOSIT_PAID: false,
+} as const;
+
+

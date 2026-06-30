@@ -101,3 +101,41 @@ export interface BookerCredentials {
   readonly username: string;
   readonly password: string;
 }
+/**
+ * Utility types - demonstrates Typescritps's built in type manipulation.
+ *
+ * These are derived from the Booking interface using TypeScript utility types.
+ * They avoid duplication -if Booking changes these updates automatically.
+ */
+
+/**
+ * Pick <T, K> - creates a type with only the specified fields.
+ * Use case: when you only need guest name fields, not the complete booking.
+ *
+ * pick select K fields FROM T.
+ */
+export type GuestName = Pick<Booking, 'firstname' | 'lastname'>;
+
+/**
+ * Omit <T, K> - create a type with all fields EXCEPT the specified ones.
+ * Use case - creating a booking without dates - dates added separately.
+ *
+ *Omit removes K FROM T.
+ */
+export type BookingWithoutDates = Omit<Booking, 'bookingdats'>;
+
+/**
+ * Required<T> - makes all optional fields mandatory.
+ * Use case - when submitting a final booking, all fields must be present
+ * including additional needs which is option
+ *
+ * Contrast with Partial<T> which makes all fields optional.
+ */
+export type CompleteBooking = Required<Booking>;
+
+/**
+ * Readonly<T> - makes all fields immutable after creation.
+ * User case: confirmed bookings should never be mutated in tests.
+ * TypeScript will throw a compile error if you try to change and field.
+ */
+export type ConfirmedBooking = Readonly<Booking>;

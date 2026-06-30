@@ -64,6 +64,8 @@ mkdir -p tests/api/graphql
 mkdir -p tests/db
 mkdir -p tests/accessibility
 mkdir -p tests/performance
+mkdir -p tests/unit/builders
+mkdir -p tests/unit/utils
 
 echo "  tests/ folders created"
 

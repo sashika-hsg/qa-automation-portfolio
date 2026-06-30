@@ -133,4 +133,12 @@ export class CheckoutPage extends BasePage {
   async backToProducts(): Promise<void> {
     await this.backHomeButton.click();
   }
+
+  /**
+   * Assert the checkout informaio page has loaded successfully.
+   */
+  async assertPageLoaded(): Promise<void> {
+    await expect(this.continueButton).toBeVisible();
+    await expect(this.firstNameInput).toBeVisible();
+  }
 }

@@ -31,6 +31,29 @@ export class UserRepository {
   }
 
   /**
+   * Generic query method - executes many sql and returns typed results.
+   * Why generic constrain <T extends object>:
+   * - <T> alone accepts anything - string, number, boolean, object
+   * - <T extend object> - constraints T to object types only
+   * - Database row aer always objects- primitives don't make sense here
+   * - Typescritp will reject calls like query<string>() at compile time
+   *
+   * Usage:
+   * const users await UserRepository.query<{name: string}>('SELECT name FROM users');
+   *
+   * @param sql 0 SQL query string
+   * @param param - optional paramerterized query values
+   */
+  static async query<T extends object>(
+    sql: string,
+    params: unknown[] = []
+  ): Promise<T[]> {
+    const db = await DbClient.getInstance();
+    const result = await db.query(sql, params);
+    return result.rows as T[];
+  }
+
+  /**
    * Get a single user by name.
    */
   static async getByName(name: string): Promise<any | null> {

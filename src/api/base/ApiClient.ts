@@ -42,35 +42,56 @@ export class ApiClient {
   /**
    * Perform a GET request.
    * @param endpoint - path relative to the baseUrl (ex: '/api/user/2' )
+   * @throws Error with contextif the request fails at the network level
    */
   async get(endpoint: string): Promise<APIResponse> {
-    return this.request.get(`${this.baseUrl}${endpoint}`, {
-      headers: this.headers,
-    });
+    try {
+      return this.request.get(`${this.baseUrl}${endpoint}`, {
+        headers: this.headers,
+      });
+    } catch (error) {
+      throw new Error(
+        `GET ${this.baseUrl}${endpoint} failed: ${(error as Error).message}`
+      );
+    }
   }
 
   /**
    * Performa POST request with a JSON body.
    * @param endpoint - path relative to the baseUrl
    * @param data - request body, sent as JSON
+   * @throws Error with context if the request fails at the network level
    */
   async post(endpoint: string, data: object): Promise<APIResponse> {
-    return this.request.post(`${this.baseUrl}${endpoint}`, {
-      data,
-      headers: this.headers,
-    });
+    try {
+      return this.request.post(`${this.baseUrl}${endpoint}`, {
+        data,
+        headers: this.headers,
+      });
+    } catch (error) {
+      throw new Error(
+        `GET ${this.baseUrl}${endpoint} failed: ${(error as Error).message}`
+      );
+    }
   }
 
   /**
    * Perform a PUT request with a JSON body.
    * @param endpoint - path relative to the baseUrl
    * @param data - request body, sent as JSON
+   * @throws Error with context if the request fails at the network level
    */
   async put(endpoint: string, data: object): Promise<APIResponse> {
-    return this.request.put(`${this.baseUrl}${endpoint}`, {
-      data,
-      headers: this.headers,
-    });
+    try {
+      return this.request.put(`${this.baseUrl}${endpoint}`, {
+        data,
+        headers: this.headers,
+      });
+    } catch (error) {
+      throw new Error(
+        `GET ${this.baseUrl}${endpoint} failed: ${(error as Error).message}`
+      );
+    }
   }
 
   /**
@@ -78,21 +99,35 @@ export class ApiClient {
    * Used for partial updates - only the provided fields are changed.
    * @param endpoint - path relative to the baseUrl
    * @param data - request body, sent as JSON
+   * @throws Error with context if the request fails at the network level
    */
   async patch(endpoint: string, data: object): Promise<APIResponse> {
-    return this.request.patch(`${this.baseUrl}${endpoint}`, {
-      data,
-      headers: this.headers,
-    });
+    try {
+      return this.request.patch(`${this.baseUrl}${endpoint}`, {
+        data,
+        headers: this.headers,
+      });
+    } catch (error) {
+      throw new Error(
+        `GET ${this.baseUrl}${endpoint} failed: ${(error as Error).message}`
+      );
+    }
   }
 
   /**
    * Perform a Delete request.
    * @param endpoint - path relative to the baseUrl
+   * @throws Error with context if the request fails at the network level
    */
   async delete(endpoint: string): Promise<APIResponse> {
-    return this.request.get(`${this.baseUrl}${endpoint}`, {
-      headers: this.headers,
-    });
+    try {
+      return this.request.get(`${this.baseUrl}${endpoint}`, {
+        headers: this.headers,
+      });
+    } catch (error) {
+      throw new Error(
+        `GET ${this.baseUrl}${endpoint} failed: ${(error as Error).message}`
+      );
+    }
   }
 }
