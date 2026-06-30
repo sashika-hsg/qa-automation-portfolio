@@ -207,6 +207,8 @@ Reports are generated per suite into separate folders:
 ---
 
 ## Project Structure
+> Note: The tree below shows the overall folder layout and representative example files in each directory — not every file in the repository is listed. See the linked sections below (QA Lifecycle Documentation, Architecture Decision Records, Design Patterns) for the complete, current file listings in `docs/`.
+
 
 ```
 qa-automation-portfolio/
