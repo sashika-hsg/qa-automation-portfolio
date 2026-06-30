@@ -24,7 +24,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Focus |
 | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — 65 unique tests (195 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
+| **v1 — Current** | 🔄 In progress — 765 unique tests (228 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
@@ -39,9 +39,9 @@ This is not a tutorial project. Every design decision is intentional, documented
 | API testing — REST | Playwright request context + AJV | ✅ ReqRes + Restful Booker, 15 tests |
 | Authentication flows | Static API key + cookie-based token | ✅ Both implemented |
 | API testing — GraphQL | Playwright + custom GraphQLClient | ✅ 10 tests, Pokémon GraphQL API |
-| Database validation | PostgreSQL + Docker + Repository pattern | ✅ 6 tests, cross-validated against API |
+| Database validation | PostgreSQL + Docker + Repository pattern | ✅ 7 tests, cross-validated against API |
 | API collections | Postman + Newman | ✅ 25 assertions, CI-integrated |
-| Unit testing | Playwright test runner | ✅ 9 tests — framework code tested in isolation |
+| Unit testing | Playwright test runner | ✅ 18 tests — framework code tested in isolation |
 | Schema validation | AJV | ✅ Implemented across all API tests |
 | TypeScript language depth | Generics, accessors, abstract classes, utility types | ✅ 8 core constructs implemented and test-covered |
 | BDD | Cucumber.js + Gherkin | ⏳ Phase 7 |
@@ -197,7 +197,7 @@ Reports are generated per suite into separate folders:
 
 | Suite | Report location |
 | --- | --- |
-| unit tests | `reports/unit-html/` |
+| Unit tests | `reports/unit-html/` |
 | UI tests | `reports/ui-html/` |
 | API tests | `reports/api-html/` |
 | GraphQL tests | `reports/graphql-html/` |
@@ -219,7 +219,9 @@ qa-automation-portfolio/
 │   ├── adr/
 │   │   ├── TEMPLATE.md
 │   │   ├── ADR-001-why-playwright.md
-│   │   └── ADR-002-why-typescript.md
+│   │   |── ADR-002-why-typescript.md
+│   │   |── ADR-003-why-postgres-over-sqlite.md
+|   |   └── ADR-008-why-graphql-testing-was-included.md
 │   ├── design/
 │   │   └── DESIGN_PATTERNS.md
 │   ├── qa-lifecycle/
@@ -248,7 +250,8 @@ qa-automation-portfolio/
 │   └── utils/
 ├── tests/
 │   ├── unit/
-│   │   └── builders/
+│   │   ├── builders/
+│   │   └── utils/
 │   ├── ui/
 │   │   └── sauceDemo/
 │   ├── api/
@@ -315,12 +318,12 @@ Every major technology decision is documented with context, alternatives conside
 | --- | --- | --- |
 | ADR-001 | Why Playwright over Selenium | ✅ Complete |
 | ADR-002 | Why TypeScript over JavaScript | ✅ Complete |
-| ADR-003 | Why PostgreSQL over SQLite | ⏳ Planned |
+| ADR-003 | Why PostgreSQL over SQLite | ✅ Complete |
 | ADR-004 | Why BDD with Cucumber | ⏳ Planned |
 | ADR-005 | Why Restful Booker as test application | ⏳ Planned |
 | ADR-006 | Why Claude API for AI integration | ⏳ Planned |
 | ADR-007 | Why Cucumber.js over other BDD tools | ⏳ Planned |
-| ADR-008 | Why GraphQL testing was included | ⏳ Planned |
+| ADR-008 | Why GraphQL testing was included | ✅ Complete |
 
 ---
 
@@ -335,11 +338,12 @@ Every major technology decision is documented with context, alternatives conside
 | ReqRes Users API | `tests/api/reqres/users.spec.ts` | 7 | @smoke @critical @regression | ✅ Passing |
 | Restful Booker Bookings API | `tests/api/restfulBooker/bookings.spec.ts` | 8 | @smoke @regression @negative @critical | ✅ Passing |
 | Pokémon GraphQL API | `tests/api/graphql/pokemon.spec.ts` | 10 | @smoke @regression @negative @graphql | ✅ Passing |
-| Database — Users Table | `tests/db/users.spec.ts` | 6 | @smoke @regression @negative @db | ✅ Passing |
+| Database — Users Table | `tests/db/users.spec.ts` | 7 | @smoke @regression @negative @db | ✅ Passing |
 | BookingBuilder — Unit Tests | `tests/unit/builders/bookingBuilder.spec.ts` | 9 | @unit | ✅ Passing |
-| **Total (unique)** | | **65** | | ✅ All passing |
+| DataUtils — Unit Tests | `tests/unit/utils/dataUtils.spec.ts` | 9 | @unit | ✅ Passing |
+| **Total (unique)** | | **76** | | ✅ All passing |
 
-UI suites (22 tests) run across chromium, firefox, and webkit — 195 total test executions in CI.
+UI suites (22 tests) run across chromium, firefox, and webkit — 228 total test executions in CI.
 Newman collection: 6 requests, 25 assertions — all passing in CI.
 CI pipeline and nightly regression both green.
 

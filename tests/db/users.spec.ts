@@ -89,4 +89,15 @@ test.describe('Database - Users Table', () => {
       expect(typeof user.job).toBe('string');
     }
   });
+
+  test('generic query method returns custom typed results @regression @db', async () => {
+    const result = await UserRepository.query<{ name: string; job: string }>(
+      'SELECT name, job FROM users WHERE name = $1',
+      [DB_USERS.JANE.name]
+    );
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe(DB_USERS.JANE.name);
+    expect(result[0].job).toBe(DB_USERS.JANE.job);
+  });
 });

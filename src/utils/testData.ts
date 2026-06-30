@@ -186,3 +186,22 @@ export const BOOKING_BUILDER_CHAINED_TEST = {
   TOTAL_PRICE: 300,
   DEPOSIT_PAID: false,
 } as const;
+
+/**
+ * Test data for DataUtils unit tests.
+ * Single source of truth for booking aggregation test scenarios.
+ */
+export const DATA_UTILS_TEST_BOOKINGS = {
+  CHEAP_GUEST: 'Cheap',
+  PRICEY_GUEST: 'Pricey',
+  CHEAP_PRICE: 50,
+  PRICEY_PRICE: 500,
+  REVENUE_PRICE_1: 100,
+  REVENUE_PRICE_2: 200,
+  REVENUE_PRICE_3: 300,
+  EXPECTED_TOTAL_REVENUE: 600,
+  SEARCH_GUEST_FOUND: 'Bob',
+  SEARCH_GUEST_NOT_FOUND: 'Zoe',
+  GUEST_ALICE: 'Alice',
+  GUEST_BOB: 'Bob',
+} as const;

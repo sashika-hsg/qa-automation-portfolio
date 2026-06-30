@@ -122,7 +122,7 @@ export type GuestName = Pick<Booking, 'firstname' | 'lastname'>;
  *
  *Omit removes K FROM T.
  */
-export type BookingWithoutDates = Omit<Booking, 'bookingdats'>;
+export type BookingWithoutDates = Omit<Booking, 'bookingdates'>;
 
 /**
  * Required<T> - makes all optional fields mandatory.
