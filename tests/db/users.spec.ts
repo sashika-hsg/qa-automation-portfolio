@@ -37,10 +37,10 @@ test.describe('Database - Users Table', () => {
   test('Return correct user count from the database @smoke @db', async () => {
     const user = await UserRepository.getByName(DB_USERS.JANE.name);
     expect(user).not.toBeNull();
-    expect(user.name).toBe(DB_USERS.JANE.name);
-    expect(user.job).toBe(DB_USERS.JANE.job);
-    expect(user.id).toBeTruthy();
-    expect(user.created_at).toBeTruthy();
+    expect(user!.name).toBe(DB_USERS.JANE.name);
+    expect(user!.job).toBe(DB_USERS.JANE.job);
+    expect(user!.id).toBeTruthy();
+    expect(user!.created_at).toBeTruthy();
   });
 
   test('Return null for a non-existent user @negative @db', async () => {
@@ -59,8 +59,8 @@ test.describe('Database - Users Table', () => {
 
     const fromDb = await UserRepository.getByName(DB_USERS.NEW_USER.name);
     expect(fromDb).not.toBeNull();
-    expect(fromDb.name).toBe(DB_USERS.NEW_USER.name);
-    expect(fromDb.job).toBe(DB_USERS.NEW_USER.job);
+    expect(fromDb!.name).toBe(DB_USERS.NEW_USER.name);
+    expect(fromDb!.job).toBe(DB_USERS.NEW_USER.job);
 
     await UserRepository.deleteByName(DB_USERS.NEW_USER.name);
   });

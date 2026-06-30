@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import { IPage } from './IPage';
 /**
  * Abstract base class for all page objects.
  * Implements Page Object Model design pattern.
@@ -6,7 +7,7 @@ import { Page, Locator } from '@playwright/test';
  * All page objects extend this class and inherit
  * common navigation and interaction methods.
  */
-export abstract class BasePage {
+export abstract class BasePage implements IPage {
   protected readonly page: Page;
   /**
    *  @param page - Playwright Page instance injected via fixtures
@@ -49,4 +50,9 @@ export abstract class BasePage {
   protected getLocator(selector: string): Locator {
     return this.page.locator(selector);
   }
+  /**
+   * Assert the page has loaded successfully.
+   * Every page object must define what "loaded" means for that page.
+   */
+  abstract assertPageLoaded(): Promise<void>;
 }

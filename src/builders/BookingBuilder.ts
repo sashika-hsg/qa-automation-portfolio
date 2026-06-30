@@ -20,7 +20,7 @@ export class BookingBuilder {
   private totalprice: number = 150;
   private depositpaid: boolean = true;
   private bookingdates: BookingDates = {
-    checkin: ' 2026-08-01',
+    checkin: '2026-08-01',
     checkout: '2026-08-10',
   };
   private additionalneeds: string = 'Breakfast';
@@ -60,6 +60,28 @@ export class BookingBuilder {
     return this;
   }
 
+  get currentFirstName(): string {
+    return this.firstname;
+  }
+
+  get currentTotalPrice(): number {
+    return this.totalprice;
+  }
+
+  set currentFirstName(value: string) {
+    if (!value || value.trim().length === 0) {
+      throw new Error('firstname cannot be empty');
+    }
+    this.firstname = value;
+  }
+
+  set currentTotalPrice(value: number) {
+    if (value < 0) {
+      throw new Error('totalprice cannot be negative');
+    }
+    this.totalprice = value;
+  }
+
   withoutDeposit(): this {
     this.depositpaid = false;
     return this;
@@ -73,8 +95,8 @@ export class BookingBuilder {
   asPremiumStay(): this {
     this.totalprice = 1500;
     this.bookingdates = {
-      checkin: '2026-09-10',
-      checkout: '2026-09-30,',
+      checkin: '2026-09-01',
+      checkout: '2026-09-30',
     };
     this.additionalneeds = 'Breakfast, Lunch, Dinner, Spa';
     return this;

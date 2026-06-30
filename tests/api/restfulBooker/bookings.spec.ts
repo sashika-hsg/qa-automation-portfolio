@@ -9,6 +9,7 @@ import {
 import { STATUS_CODES } from '@utils/statusCodes';
 import { RESTFUL_BOOKER_AUTH, RESTFUL_BOOKER_BOOKING } from '@utils/testData';
 import { BookingBuilder } from '@builders/BookingBuilder';
+import { StatusCodeHandler } from '@utils/statusCodeHandler';
 
 const ajv = new Ajv();
 
@@ -47,6 +48,11 @@ test.describe('Restful Booker - Booking API', () => {
     const valdateAuthSchema = ajv.compile(authResponseSchema);
     const isSchemeValid = valdateAuthSchema(responseBody);
     expect(isSchemeValid).toBe(true);
+    expect(StatusCodeHandler.isSuccess(respnse.status())).toBe(true);
+    expect(StatusCodeHandler.getCategory(respnse.status())).toBe('success');
+    expect(StatusCodeHandler.getDescription(respnse.status())).toBe(
+      'OK - request succeeded'
+    );
   });
 
   test('create a new booking with valid schema @smoke @critical', async ({
@@ -175,5 +181,9 @@ test.describe('Restful Booker - Booking API', () => {
     // This test documents ACTUAL observed sandbox behaviour rather than
     // asserting the documented contract, to avoid a misleading failure.
     expect(response.status()).toBe(STATUS_CODES.OK);
+    // Document the sandbox quirk using StatusCodeHandler
+    expect(StatusCodeHandler.getDescription(response.status())).toBe(
+      'OK - request succeeded'
+    );
   });
 });

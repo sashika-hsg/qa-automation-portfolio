@@ -14,8 +14,10 @@ import { DB_USERS } from '@utils/testData';
  * const user = new UserBuilder().asQAWngineer().build();
  */
 export interface DbUser {
+  id?: number;
   name: string;
   job: string;
+  created_at?: Date;
 }
 
 export class UserBuilder {
