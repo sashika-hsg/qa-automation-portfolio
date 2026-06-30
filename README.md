@@ -24,7 +24,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Focus |
 | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — 765 unique tests (228 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
+| **v1 — Current** | 🔄 In progress — 76 unique tests (228 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
