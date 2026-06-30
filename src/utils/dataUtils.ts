@@ -59,8 +59,8 @@ export class DataUtils {
    *
    * @param bookings - array of bookings to sum
    */
-  static caluculateTotalRevenue(booking: Booking[]): number {
-    return booking.reduce((total, booking) => total + booking.totalprice, 0);
+  static calculateTotalRevenue(bookings: Booking[]): number {
+    return bookings.reduce((total, booking) => total + booking.totalprice, 0);
   }
   /**
    * Get the most expensive booking from an arry.
@@ -83,7 +83,7 @@ export class DataUtils {
    * @param bookings - array of bookings
    * @returns object with 'paid' and 'unpaid' arrays
    */
-  static groupDepositStatus(bookings: Booking[]): {
+  static groupByDepositStatus(bookings: Booking[]): {
     paid: Booking[];
     unpaid: Booking[];
   } {
