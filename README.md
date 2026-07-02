@@ -24,7 +24,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Focus |
 | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — 76 unique tests (228 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
+| **v1 — Current** | 🔄 In progress — 76 unique tests (228 executions across 3 browsers) + 45 Newman assertions (ReqRes 25 + Stripe 20), green CI pipeline | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
@@ -40,7 +40,7 @@ This is not a tutorial project. Every design decision is intentional, documented
 | Authentication flows | Static API key + cookie-based token | ✅ Both implemented |
 | API testing — GraphQL | Playwright + custom GraphQLClient | ✅ 10 tests, Pokémon GraphQL API |
 | Database validation | PostgreSQL + Docker + Repository pattern | ✅ 7 tests, cross-validated against API |
-| API collections | Postman + Newman | ✅ 25 assertions, CI-integrated |
+| API collections | Postman + Newman | ✅ 45 assertions across 2 collections (ReqRes + Stripe), CI-integrated |
 | Unit testing | Playwright test runner | ✅ 18 tests — framework code tested in isolation |
 | Schema validation | AJV | ✅ Implemented across all API tests |
 | TypeScript language depth | Generics, accessors, abstract classes, utility types | ✅ 8 core constructs implemented and test-covered |
@@ -124,7 +124,7 @@ Beyond basic syntax, this framework deliberately exercises core TypeScript and O
 | Restful Booker | UI + REST API | https://restful-booker.herokuapp.com |
 | ReqRes | REST API | https://reqres.in |
 | Pokémon GraphQL | GraphQL API | https://graphql-pokemon2.vercel.app |
-
+| Stripe | Payment API (sandbox) | https://api.stripe.com |
 ---
 
 ## Quick Start
@@ -202,7 +202,8 @@ Reports are generated per suite into separate folders:
 | API tests | `reports/api-html/` |
 | GraphQL tests | `reports/graphql-html/` |
 | Database tests | `reports/db-html/` |
-| Newman | `reports/newman/report.html` |
+| Newman — ReqRes | `reports/newman/reqres-report.html` |
+| Newman — Stripe | `reports/newman/stripe-report.html` |
 
 ---
 
@@ -346,7 +347,7 @@ Every major technology decision is documented with context, alternatives conside
 | **Total (unique)** | | **76** | | ✅ All passing |
 
 UI suites (22 tests) run across chromium, firefox, and webkit — 228 total test executions in CI.
-Newman collection: 6 requests, 25 assertions — all passing in CI.
+Newman collections: ReqRes (6 requests, 25 assertions) + Stripe Payment API (6 requests, 20 assertions) — all passing in CI.
 CI pipeline and nightly regression both green.
 
 ---

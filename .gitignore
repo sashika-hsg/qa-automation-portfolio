@@ -14,3 +14,5 @@ src/utils/TypeScriptPlayground.ts
 .env
 postman/environments
 !postman/environments/*.ci.json
+# Personal interview prep — not for the public repo
+docs/interview-prep/
