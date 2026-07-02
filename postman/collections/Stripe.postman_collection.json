@@ -1,0 +1,453 @@
+{
+  "info": {
+    "_postman_id": "56171775-3f51-4ad2-bab3-0068bcbb7004",
+    "name": "Stripe",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53101215",
+    "_collection_link": "https://go.postman.co/collection/53101215-56171775-3f51-4ad2-bab3-0068bcbb7004?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create Payment Intent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//test for the status code\r",
+              "pm.test(\"status code must be 200\", function(){\r",
+              "    pm.response.to.have.status(parseInt(pm.environment.get(\"success_status_code\")));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Payment intent is created with correct status\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.status).to.eql(\"requires_payment_method\");\r",
+              "    pm.expect(body.amount).to.eql(parseInt(pm.environment.get(\"specified_amount\")));\r",
+              "    pm.expect(body.currency).to.eql(pm.environment.get(\"specified_currency\"));\r",
+              "    pm.expect(body.livemode).to.be.false;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Store payment intent\",function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.environment.set(\"payment_intent_id\", body.id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{secret_key}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{specified_amount}}",
+              "type": "text",
+              "uuid": "2bc2021e-75f6-4234-ac76-377592ba1324"
+            },
+            {
+              "key": "currency",
+              "value": "{{specified_currency}}",
+              "type": "text",
+              "uuid": "95f56ad0-033b-4621-b0e7-38caccb40ab9"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "88bd4ada-b6eb-4140-9bdd-ea48718e4f3b"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "142d5856-7cbc-43e8-9de7-90e8d8fc3c59"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/payment_intents",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm Payment Intent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function(){\r",
+              "        pm.response.to.have.status(parseInt(pm.environment.get(\"success_status_code\")));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Payment intent is confirmed\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.status).to.eql(\"succeeded\");\r",
+              "    pm.expect(body.amount_received).to.eql(parseInt(pm.environment.get(\"specified_amount\")));\r",
+              "    pm.expect(body.livemode).to.eql(false);\r",
+              "});\r",
+              "\r",
+              "pm.test('Payment method is attached', function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.payment_method).to.not.eql(null);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Store charge ID for refund\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.environment.set(\"charge_id\", body.latest_charge);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{secret_key}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "pm_card_visa",
+              "type": "text",
+              "uuid": "97c11f32-0222-4186-8e29-c20a8054e3fc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/payment_intents/{{payment_intent_id}}/confirm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{payment_intent_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Retrieve Payment Intent",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function(){\r",
+              "        pm.response.to.have.status(parseInt(pm.environment.get(\"success_status_code\")));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Retrieved payment intent matches created intent\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.id).to.eql(pm.environment.get(\"payment_intent_id\"));\r",
+              "    pm.expect(body.status).to.eql(\"succeeded\");\r",
+              "    pm.expect(body.amount).to.eql(parseInt(pm.environment.get(\"specified_amount\")));\r",
+              "    pm.expect(body.currency).to.eql(pm.environment.get(\"specified_currency\"));\r",
+              "    pm.expect(body.livemode).to.eql(false);\r",
+              "    \r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{secret_key}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/payment_intents/{{payment_intent_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{payment_intent_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Payment Intent- Decline",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//test for the status code\r",
+              "pm.test(\"status code must be 200\", function(){\r",
+              "    pm.response.to.have.status(parseInt(pm.environment.get(\"success_status_code\")));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Payment intent is created with correct status\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.status).to.eql(\"requires_payment_method\");\r",
+              "    pm.expect(body.amount).to.eql(parseInt(pm.environment.get(\"specified_amount\")));\r",
+              "    pm.expect(body.currency).to.eql(pm.environment.get(\"specified_currency\"));\r",
+              "    pm.expect(body.livemode).to.be.false;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Store payment intent\",function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.environment.set(\"decline_payment_intent_id\", body.id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{secret_key}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "amount",
+              "value": "{{specified_amount}}",
+              "type": "text",
+              "uuid": "2bc2021e-75f6-4234-ac76-377592ba1324"
+            },
+            {
+              "key": "currency",
+              "value": "{{specified_currency}}",
+              "type": "text",
+              "uuid": "95f56ad0-033b-4621-b0e7-38caccb40ab9"
+            },
+            {
+              "key": "automatic_payment_methods[enabled]",
+              "value": "true",
+              "type": "text",
+              "uuid": "88bd4ada-b6eb-4140-9bdd-ea48718e4f3b"
+            },
+            {
+              "key": "automatic_payment_methods[allow_redirects]",
+              "value": "never",
+              "type": "text",
+              "uuid": "142d5856-7cbc-43e8-9de7-90e8d8fc3c59"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/payment_intents",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm Payment Intent Decline",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 402\", function(){\r",
+              "        pm.response.to.have.status(parseInt(pm.environment.get(\"payment_required_status_code\")));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Payment is declined with card decline error\", function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.error.code).to.eql('card_declined');\r",
+              "    pm.expect(body.error.type).to.eql(\"card_error\");\r",
+              "\r",
+              "});\r",
+              "\r",
+              "pm.test('Decline reason is documented', function(){\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.error.message).to.be.a(\"string\");\r",
+              "    pm.expect(body.error.message.length).to.be.greaterThan(0);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{secret_key}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "payment_method",
+              "value": "pm_card_visa_chargeDeclined",
+              "type": "text",
+              "uuid": "97c11f32-0222-4186-8e29-c20a8054e3fc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/payment_intents/{{decline_payment_intent_id}}/confirm",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "payment_intents",
+            "{{decline_payment_intent_id}}",
+            "confirm"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Payment Intent Refund Flow",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "//test for the status code\r",
+              "pm.test(\"status code must be 200\", function(){\r",
+              "    pm.response.to.have.status(parseInt(pm.environment.get(\"success_status_code\")));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Refund is created successfully\", function(){\r",
+              "    const body =  pm.response.json();\r",
+              "    pm.expect(body.object).to.eql(\"refund\");\r",
+              "    pm.expect(body.status).to.eql(\"succeeded\");\r",
+              "    pm.expect(body.amount).to.eql(parseInt(pm.environment.get(\"specified_amount\")));\r",
+              "    pm.expect(body.currency).to.eql(pm.environment.get(\"specified_currency\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Refund is linked to the correct charge\", function() {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.expect(body.charge).to.be.eql(pm.environment.get(\"charge_id\"));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Store refund ID\", function() {\r",
+              "    const body = pm.response.json();\r",
+              "    pm.environment.set(\"refund_id\", body.id);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "{{secret_key}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "charge",
+              "value": "{{charge_id}}",
+              "type": "text",
+              "uuid": "0815d0c9-b08a-4caf-9485-28ea3fec7517"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/refunds",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "refunds"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

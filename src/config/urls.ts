@@ -9,4 +9,5 @@ export const BASE_URLS = {
   RESTFUL_BOOKER: 'https://restful-booker.herokuapp.com',
   REQRES: 'https://reqres.in',
   GRAPHQL_POKEMON: 'https://graphql-pokemon2.vercel.app',
+  STRIPE_API: 'https://api.stripe.com',
 } as const;
