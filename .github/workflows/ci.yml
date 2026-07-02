@@ -202,6 +202,11 @@ jobs:
         env:
           REQRES_API_KEY: ${{ secrets.REQRES_API_KEY }}
 
+      - name: Run Newman tests — Stripe
+        run: npm run test:newman:stripe
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+
       - name: Upload Newman report
         uses: actions/upload-artifact@v4
         if: always()
