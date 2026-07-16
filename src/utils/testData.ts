@@ -249,3 +249,9 @@ export const THE_INTERNET_HOVERS = {
   AVATAR_2_CAPTION: 'name: user2',
   AVATAR_3_CAPTION: 'name: user3',
 } as const;
+
+export const THE_INTERNET_IFRAME = {
+  HEADING: 'An iFrame containing the TinyMCE WYSIWYG Editor',
+  DEFAULT_TEXT: 'Your content goes here.',
+  TYPED_TEXT: 'Hello from Playwright!',
+} as const;
