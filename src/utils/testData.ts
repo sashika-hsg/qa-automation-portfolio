@@ -255,3 +255,13 @@ export const THE_INTERNET_IFRAME = {
   DEFAULT_TEXT: 'Your content goes here.',
   TYPED_TEXT: 'Hello from Playwright!',
 } as const;
+
+export const SAUCE_DEMO_NETWORK = {
+  TOTAL_PRODUCTS: 6,
+  TEST_HEADER_KEY: 'x-test-header',
+  TEST_HEADER_VALUE: 'playwright-intercept',
+  BLOCKED_RESOURCE: '**/*.png',
+  INVENTORY_URL_PATTERN: '**/inventory.html',
+  BASE_URL_PATTERN: '**/saucedemo.com**',
+  BLOCKED_PRODUCT_COUNT: 0,
+} as const;
