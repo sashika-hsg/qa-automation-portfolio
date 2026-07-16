@@ -239,3 +239,13 @@ export const THE_INTERNET_CHECKBOXES = {
   // Checkbox 2 is checked by default on page load
   CHECKBOX_2_DEFAULT_STATE: true,
 } as const;
+
+export const THE_INTERNET_HOVERS = {
+  TOTAL_AVATARS: 3,
+  AVATAR_1_INDEX: 1,
+  AVATAR_2_INDEX: 2,
+  AVATAR_3_INDEX: 3,
+  AVATAR_1_CAPTION: 'name: user1',
+  AVATAR_2_CAPTION: 'name: user2',
+  AVATAR_3_CAPTION: 'name: user3',
+} as const;
