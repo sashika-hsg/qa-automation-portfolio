@@ -205,3 +205,37 @@ export const DATA_UTILS_TEST_BOOKINGS = {
   GUEST_ALICE: 'Alice',
   GUEST_BOB: 'Bob',
 } as const;
+
+/**
+ * Test data for The Internet application tests.
+ */
+export const THE_INTERNET_DROPDOWN = {
+  OPTIONS: ['Option 1', 'Option 2'],
+  OPTION_1: 'Option 1',
+  OPTION_2: 'Option 2',
+  OPTION_1_VALUE: '1',
+  OPTION_2_VALUE: '2',
+  TOTAL_OPTIONS: 3,
+  // Please select + Option 1 + Option 2
+} as const;
+
+export const THE_INTERNET_ALERTS = {
+  ALERT_MESSAGE: 'I am a JS Alert',
+  CONFIRM_MESSAGE: 'I am a JS Confirm',
+  PROMPT_MESSAGE: 'I am a JS prompt',
+  PROMPT_INPUT: 'Hello World',
+  RESULT_ALERT_ACCEPTED: 'You successfully clicked an alert',
+  RESULT_CONFIRM_ACCEPTED: 'You clicked: Ok',
+  RESULT_CONFIRM_DISMISSED: 'You clicked: Cancel',
+  RESULT_PROMPT_ACCEPTED: 'You entered: Hello World',
+} as const;
+
+export const THE_INTERNET_CHECKBOXES = {
+  TOTAL_CHECKBOXES: 2,
+  CHECKBOX_1_INDEX: 1,
+  CHECKBOX_2_INDEX: 2,
+  // Checkbox 1 is unchecked by default on page load
+  CHECKBOX_1_DEFAULT_STATE: false,
+  // Checkbox 2 is checked by default on page load
+  CHECKBOX_2_DEFAULT_STATE: true,
+} as const;
