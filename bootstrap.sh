@@ -96,6 +96,16 @@ mkdir -p step-definitions/api
 echo "  step-definitions/ folders created"
 
 # ------------------------------------------------------------------------------
+# BDD layer — Cucumber Support folder
+# ------------------------------------------------------------------------------
+
+echo "Creating support folder ..."
+
+mkdir -p support
+
+echo "  support/ folder created"
+
+# ------------------------------------------------------------------------------
 # Postman collections and environments
 # ------------------------------------------------------------------------------
 
