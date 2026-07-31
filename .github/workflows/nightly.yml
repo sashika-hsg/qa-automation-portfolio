@@ -44,6 +44,13 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
 
+      - name: Run BDD tests
+        run: npm run test:bdd
+        env:
+          SAUCE_DEMO_BASE_URL: ${{ secrets.SAUCE_DEMO_BASE_URL }}
+          SAUCE_DEMO_USERNAME: ${{ secrets.SAUCE_DEMO_USERNAME }}
+          SAUCE_DEMO_PASSWORD: ${{ secrets.SAUCE_DEMO_PASSWORD }}  
+
       - name: Seed database
         run: npm run db:seed
         env:
