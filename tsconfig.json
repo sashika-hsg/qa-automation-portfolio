@@ -21,6 +21,7 @@
       "@factories/*": ["src/factories/*"],
       "@fixtures/*": ["src/fixtures/*"],
       "@ai/*": ["src/ai/*"]
+      
     },
     "skipLibCheck": true
   },
@@ -33,5 +34,9 @@
     "node_modules",
     "dist",
     "tests/performance"
-  ]
+  ],
+  "requireModule" : [
+    "ts-node/register",
+    "tsconfig-paths/register"
+  ],
 }
