@@ -318,10 +318,120 @@ export class GraphQLClient {
   }
 }
 ```
+## 9. Facade Pattern — Barrel Exports
+
+**Location:** `src/pages/sauceDemo/index.ts`, `src/pages/theInternet/index.ts`
+
+### Problem it solves
+
+Without barrel exports, test files and step definitions need a separate import line for every page object they use. If a page object file is renamed or moved, every file that imports it needs updating.
+
+```typescript
+// Without Facade — verbose, fragile to file renames
+import { LoginPage } from '../../src/pages/sauceDemo/LoginPage';
+import { InventoryPage } from '../../src/pages/sauceDemo/InventoryPage';
+import { CartPage } from '../../src/pages/sauceDemo/CartPage';
+import { CheckoutPage } from '../../src/pages/sauceDemo/CheckoutPage';
+
+// With Facade — single import, rename-safe
+import { LoginPage, InventoryPage, CartPage, CheckoutPage } from '../../src/pages/sauceDemo';
+```
+
+### How it is implemented
+
+Each page object folder has an `index.ts` that re-exports all page objects from that folder. The `index.ts` is the facade — it presents a unified interface to the folder's contents without exposing the internal file structure.
+
+```typescript
+// src/pages/sauceDemo/index.ts
+export { LoginPage } from './LoginPage';
+export { InventoryPage } from './InventoryPage';
+export { CartPage } from './CartPage';
+export { CheckoutPage } from './CheckoutPage';
+```
+
+### Why this pattern fits here
+
+The framework has multiple consumers of page objects — Playwright test files, Cucumber step definitions, and fixtures. Barrel exports mean a single import path works everywhere, and internal file reorganisation never breaks consumers.
+
+### Alternatives considered
+
+- **Direct file imports** — rejected because renaming or moving a page object file requires updating every consumer. With barrel exports, only the `index.ts` needs updating.
+- **Wildcard imports** — `import * as pages from '../../src/pages/sauceDemo'` — rejected because it pollutes the namespace and makes it unclear which page objects are actually used.
+
+---
+
+## 10. World Pattern — Cucumber Shared State
+
+**Location:** `support/hooks.ts`
+
+### Problem it solves
+
+Cucumber step definitions are separate functions — each `Given`, `When`, `Then` is an independent function call. They cannot share local variables. Without a shared state mechanism, the browser instance, page context, and page objects would need to be recreated in every step, or stored as module-level globals that leak between scenarios.
+
+```typescript
+// Without World — module-level globals, leak between scenarios
+let browser: Browser;
+let page: Page;
+
+Before(async () => { browser = await chromium.launch(); });
+Given('...', async () => { /* how does this access page? */ });
+```
+
+### How it is implemented
+
+The `CustomWorld` class extends Cucumber's `World` base class. Browser, context, page, and page objects are stored as properties on `this`. Every step function receives the World instance as `this`, giving all steps access to shared state without globals.
+
+```typescript
+export class CustomWorld extends World {
+  browser!: Browser;
+  context!: BrowserContext;
+  page!: Page;
+  loginPage!: LoginPage;
+  inventoryPage!: InventoryPage;
+}
+
+setWorldConstructor(CustomWorld);
+
+Before(async function (this: CustomWorld) {
+  this.browser = await chromium.launch({ headless: true });
+  this.context = await this.browser.newContext({ baseURL: BASE_URLS.SAUCE_DEMO });
+  this.page = await this.context.newPage();
+  this.loginPage = new LoginPage(this.page);
+  this.inventoryPage = new InventoryPage(this.page);
+});
+```
+
+### Critical constraint — `function` not arrow functions
+
+Step definitions that use `this` (the World) **must** use the `function` keyword, not arrow functions. Arrow functions do not have their own `this` — they inherit it from the outer scope, which in a module is `undefined` or the module object, not the World instance.
+
+```typescript
+// CORRECT — function keyword, this is the World
+Given('I am on the login page', async function (this: CustomWorld) {
+  await this.loginPage.navigate();
+});
+
+// WRONG — arrow function, this is undefined
+Given('I am on the login page', async () => {
+  await this.loginPage.navigate(); // TypeError: Cannot read properties of undefined
+});
+```
+
+### Why this pattern fits here
+
+The World pattern is Cucumber's native solution to shared state — it's created fresh before each scenario and destroyed after. This ensures complete test isolation: no state leaks between scenarios, and each scenario starts with a clean browser context.
+
+### Alternatives considered
+
+- **Module-level variables** — simpler to write but state leaks between scenarios if cleanup is forgotten. Also problematic in parallel execution where multiple scenarios run simultaneously.
+- **Dependency injection frameworks** — over-engineered for a single-file step definition layer.
+- **Storing state in the feature file** — not possible in standard Gherkin.
+
+---
 
 This demonstrates that design patterns are tools, not rules. The right decision is sometimes to consciously not apply a pattern.
 
 ---
 
-*Last updated: June 2026*
-*Framework version: v1*
+*Last updated: July 2026*
+*Framework version: v1— 10 patterns documented*

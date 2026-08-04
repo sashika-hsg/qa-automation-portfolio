@@ -2,7 +2,7 @@
 
 > A production-grade QA automation framework built from scratch to demonstrate
 > senior QA engineering and SDET capabilities across UI, API, database,
-> security, performance, accessibility, and AI-powered testing.
+> accessibility, BDD, and AI-powered testing.
 
 [![CI Pipeline](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/ci.yml)
 [![Nightly Regression](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/nightly.yml/badge.svg)](https://github.com/sashika-hsg/qa-automation-portfolio/actions/workflows/nightly.yml)
@@ -24,7 +24,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Focus |
 | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — 76 unique tests (228 executions across 3 browsers) + 25 Newman assertions, green CI pipeline | Core automation framework |
+| **v1 — Current** | 🔄 In progress — 103 unique Playwright tests + 5 BDD scenarios + 45 Newman assertions, green CI pipeline | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
@@ -35,23 +35,27 @@ This is not a tutorial project. Every design decision is intentional, documented
 
 | Skill | Tool | Status |
 | --- | --- | --- |
-| UI automation | Playwright + POM | ✅ 22 tests, 3 browsers (chromium, firefox, webkit) |
+| UI automation | Playwright + POM | ✅ 36 tests across Sauce Demo + The Internet, 3 browsers |
 | API testing — REST | Playwright request context + AJV | ✅ ReqRes + Restful Booker, 15 tests |
-| Authentication flows | Static API key + cookie-based token | ✅ Both implemented |
+| Authentication flows | Static API key + cookie-based token + Basic Auth | ✅ Three auth models implemented |
 | API testing — GraphQL | Playwright + custom GraphQLClient | ✅ 10 tests, Pokémon GraphQL API |
+| Payment API testing | Stripe sandbox + Postman/Newman | ✅ 6 requests, 20 assertions, full payment lifecycle |
 | Database validation | PostgreSQL + Docker + Repository pattern | ✅ 7 tests, cross-validated against API |
-| API collections | Postman + Newman | ✅ 25 assertions, CI-integrated |
+| API collections | Postman + Newman | ✅ 45 assertions (ReqRes 25 + Stripe 20), CI-integrated |
 | Unit testing | Playwright test runner | ✅ 18 tests — framework code tested in isolation |
 | Schema validation | AJV | ✅ Implemented across all API tests |
 | TypeScript language depth | Generics, accessors, abstract classes, utility types | ✅ 8 core constructs implemented and test-covered |
-| BDD | Cucumber.js + Gherkin | ⏳ Phase 7 |
+| BDD | Cucumber.js + Gherkin | ✅ 5 scenarios, login feature, World pattern |
+| Accessibility testing | axe-core | ✅ 3 tests, WCAG 2.1 AA, colour contrast, keyboard navigation |
+| Network interception | Playwright `page.route()` | ✅ Request mocking, blocking, header modification |
+| iframe handling | Playwright `frameLocator()` | ✅ TinyMCE editor interaction |
+| UI element interactions | Dropdowns, checkboxes, alerts, hovers | ✅ The Internet test suite |
 | Security testing | Custom security spec | ⏳ Phase 8 |
 | Performance testing | k6 | ⏳ Phase 8 |
-| Accessibility testing | axe-core | ⏳ Phase 6 |
 | Visual regression | Playwright screenshots | ⏳ Phase 6 |
 | Mobile testing | Playwright viewport | ⏳ Phase 6 |
 | AI integration | Claude API | ⏳ Phase 10 |
-| CI/CD pipeline | GitHub Actions — 2 workflows, branch protection, auto-merge | ✅ Complete — green pipeline |
+| CI/CD pipeline | GitHub Actions — 2 workflows, branch protection | ✅ Complete — green pipeline |
 | Cloud monitoring | AWS CloudWatch | ⏳ Phase 11 |
 | Reporting | Allure + Playwright HTML | ⏳ Phase 11 |
 
@@ -70,6 +74,8 @@ Every pattern is justified — not just used for the sake of it. Full reasoning,
 | Singleton | `src/db/client.ts` | ✅ Implemented | One shared PostgreSQL connection across all DB tests |
 | Repository | `src/db/repositories/userRepository.ts` | ✅ Implemented | DB engine agnostic data access — SQL isolated from tests |
 | Builder | `src/builders/BookingBuilder.ts`, `UserBuilder.ts` | ✅ Implemented | Readable, flexible test data construction with method chaining |
+| Facade | `src/pages/sauceDemo/index.ts`, `src/pages/theInternet/index.ts` | ✅ Implemented | Single import point for page objects — hides internal file structure |
+| World (Cucumber) | `support/hooks.ts` | ✅ Implemented | Shared browser/page/page-object state across all Cucumber step definitions |
 
 The framework also documents an intentional **non-pattern decision** — `GraphQLClient` does not extend `ApiClient`, since GraphQL's single-endpoint POST-only transport makes REST method inheritance misleading. See the design patterns doc for the full reasoning.
 
@@ -100,7 +106,8 @@ Beyond basic syntax, this framework deliberately exercises core TypeScript and O
 | UI Testing | Playwright | 1.44+ |
 | API Testing — REST | Playwright request context | 1.44+ |
 | API Testing — GraphQL | Playwright + custom client | 1.44+ |
-| BDD | Cucumber.js + Gherkin | 10.x |
+| BDD | Cucumber.js + Gherkin | 12.x |
+| Accessibility | axe-core | 4.x |
 | API Collections | Postman + Newman | Latest |
 | Database | PostgreSQL 15 via Docker | 15 |
 | Container Runtime | Docker Desktop | Latest |
@@ -110,7 +117,6 @@ Beyond basic syntax, this framework deliberately exercises core TypeScript and O
 | Cloud Monitoring | AWS CloudWatch | ⏳ Planned |
 | AI Integration | Claude API — Anthropic | ⏳ Planned |
 | Performance | k6 | ⏳ Planned |
-| Accessibility | axe-core | ⏳ Planned |
 | Code Quality | ESLint v8 + Prettier + Husky | Latest |
 
 ---
@@ -124,6 +130,7 @@ Beyond basic syntax, this framework deliberately exercises core TypeScript and O
 | Restful Booker | UI + REST API | https://restful-booker.herokuapp.com |
 | ReqRes | REST API | https://reqres.in |
 | Pokémon GraphQL | GraphQL API | https://graphql-pokemon2.vercel.app |
+| Stripe | Payment API (sandbox) | https://api.stripe.com |
 
 ---
 
@@ -167,21 +174,24 @@ npm run test:smoke
 | Command | What it runs |
 | --- | --- |
 | `npm run test:unit` | Unit tests — framework code in isolation |
-| `npm run test:ui` | All UI tests |
+| `npm run test:ui` | All UI tests (Sauce Demo + The Internet) |
 | `npm run test:api` | All REST API tests (ReqRes + Restful Booker) |
 | `npm run test:graphql` | GraphQL tests (Pokémon API) |
 | `npm run test:db` | Database validation tests |
 | `npm run test:accessibility` | Accessibility checks |
-| `npm run test:security` | Security tests |
 | `npm run test:smoke` | Smoke suite — @smoke tagged tests |
 | `npm run test:regression` | Full regression — @regression tagged |
 | `npm run test:all` | Everything |
-| `npm run test:newman` | Postman collections via Newman (local) |
-| `npm run test:newman:ci` | Postman collections via Newman (CI) |
-| `npm run test:ui:bdd` | BDD UI feature files |
-| `npm run test:api:bdd` | BDD API feature files |
+| `npm run test:bdd` | All BDD scenarios via Cucumber |
+| `npm run test:ui:bdd` | BDD UI feature files only |
+| `npm run test:api:bdd` | BDD API feature files only |
+| `npm run test:newman:ci` | ReqRes Newman collection (CI) |
+| `npm run test:newman:reqres` | ReqRes Newman collection (named) |
+| `npm run test:newman:stripe` | Stripe Newman collection |
+| `npm run test:newman:all` | All Newman collections |
+| `./scripts/newman-local.sh` | All Newman collections (local — loads from .env) |
 
-> Note: some scripts are placeholders for upcoming phases — see PHASES.md
+> See [`docs/guides/COMMANDS_REFERENCE.md`](docs/guides/COMMANDS_REFERENCE.md) for the complete command reference.
 
 ---
 
@@ -202,13 +212,14 @@ Reports are generated per suite into separate folders:
 | API tests | `reports/api-html/` |
 | GraphQL tests | `reports/graphql-html/` |
 | Database tests | `reports/db-html/` |
-| Newman | `reports/newman/report.html` |
+| Newman — ReqRes | `reports/newman/reqres-report.html` |
+| Newman — Stripe | `reports/newman/stripe-report.html` |
 
 ---
 
 ## Project Structure
-> Note: The tree below shows the overall folder layout and representative example files in each directory — not every file in the repository is listed. See the linked sections below (QA Lifecycle Documentation, Architecture Decision Records, Design Patterns) for the complete, current file listings in `docs/`.
 
+> Note: The tree below shows the overall folder layout and representative example files in each directory — not every file in the repository is listed. See the linked sections below (QA Lifecycle Documentation, Architecture Decision Records, Design Patterns) for the complete, current file listings in `docs/`.
 
 ```
 qa-automation-portfolio/
@@ -221,14 +232,32 @@ qa-automation-portfolio/
 │   ├── adr/
 │   │   ├── TEMPLATE.md
 │   │   ├── ADR-001-why-playwright.md
-│   │   |── ADR-002-why-typescript.md
-│   │   |── ADR-003-why-postgres-over-sqlite.md
-|   |   └── ADR-008-why-graphql-testing-was-included.md
+│   │   ├── ADR-002-why-typescript.md
+│   │   ├── ADR-003-why-postgres-over-sqlite.md
+│   │   ├── ADR-004-why-bdd-with-cucumber.md
+│   │   ├── ADR-005-why-restful-booker-as-test-application.md
+│   │   ├── ADR-006-why-claude-api-for-ai-integration.md
+│   │   ├── ADR-007-why-cucumberjs-over-other-bdd-tools.md
+│   │   └── ADR-008-why-graphql-testing-was-included.md
 │   ├── design/
 │   │   └── DESIGN_PATTERNS.md
+│   ├── guides/
+│   │   ├── COMMANDS_REFERENCE.md
+│   │   └── MERGE_CONFLICT_RESOLUTION_GUIDE.md
 │   ├── qa-lifecycle/
 │   ├── usability/
 │   └── ai-integration/
+├── features/
+│   └── ui/
+│       └── sauceDemo/
+│           └── login.feature
+├── step-definitions/
+│   └── ui/
+│       └── login.steps.ts
+├── support/
+│   └── hooks.ts
+├── scripts/
+│   └── newman-local.sh
 ├── src/
 │   ├── api/
 │   │   ├── base/
@@ -241,7 +270,6 @@ qa-automation-portfolio/
 │   │   ├── migrations/
 │   │   ├── repositories/
 │   │   └── seed/
-│   ├── factories/
 │   ├── fixtures/
 │   ├── models/
 │   ├── pages/
@@ -255,7 +283,8 @@ qa-automation-portfolio/
 │   │   ├── builders/
 │   │   └── utils/
 │   ├── ui/
-│   │   └── sauceDemo/
+│   │   ├── sauceDemo/
+│   │   └── theInternet/
 │   ├── api/
 │   │   ├── reqres/
 │   │   ├── restfulBooker/
@@ -269,8 +298,10 @@ qa-automation-portfolio/
 ├── reports/
 ├── .env.example
 ├── playwright.config.ts
+├── cucumber.config.js
 ├── tsconfig.json
 ├── package.json
+├── bootstrap.sh
 ├── PHASES.md
 ├── GANTT.md
 └── README.md
@@ -286,10 +317,12 @@ Every push triggers the CI pipeline automatically.
 | --- | --- | --- |
 | Quality Checks | Every push to every branch | TypeScript compile + ESLint |
 | Unit Tests | Every push to every branch | Framework code in isolation — fastest fail-fast gate |
+| BDD Tests | Every push to every branch | Cucumber scenarios — Sauce Demo login feature |
 | UI Tests | PR to main or push to main | UI suite — chromium, firefox, webkit |
 | API Tests | PR to main or push to main | ReqRes + Restful Booker + GraphQL |
 | Database Tests | PR to main or push to main | PostgreSQL validation via Docker service container |
-| Newman Tests | PR to main or push to main | Postman collection — 25 assertions |
+| Newman Tests — ReqRes | PR to main or push to main | Postman collection — 25 assertions |
+| Newman Tests — Stripe | PR to main or push to main | Stripe payment API — 20 assertions |
 | Quality Gate | After all jobs | Fails if quality checks fail |
 | Nightly Regression | Every night at midnight UTC | Full suite — all phases |
 
@@ -309,6 +342,9 @@ This project includes the complete QA lifecycle — not just scripts.
 | Test Summary Report | `docs/qa-lifecycle/TEST_SUMMARY_REPORT.md` | ✅ Complete |
 | Usability Evaluation | `docs/usability/HEURISTICS_EVALUATION.md` | ✅ Complete |
 | Design Patterns | `docs/design/DESIGN_PATTERNS.md` | ✅ Complete |
+| Commands Reference | `docs/guides/COMMANDS_REFERENCE.md` | ✅ Complete |
+| Merge Conflict Guide | `docs/guides/MERGE_CONFLICT_RESOLUTION_GUIDE.md` | ✅ Complete |
+| Framework Checklist | `docs/COMPLETENESS_CHECKLIST.md` | ✅ Complete |
 
 ---
 
@@ -321,10 +357,10 @@ Every major technology decision is documented with context, alternatives conside
 | ADR-001 | Why Playwright over Selenium | ✅ Complete |
 | ADR-002 | Why TypeScript over JavaScript | ✅ Complete |
 | ADR-003 | Why PostgreSQL over SQLite | ✅ Complete |
-| ADR-004 | Why BDD with Cucumber | ⏳ Planned |
-| ADR-005 | Why Restful Booker as test application | ⏳ Planned |
-| ADR-006 | Why Claude API for AI integration | ⏳ Planned |
-| ADR-007 | Why Cucumber.js over other BDD tools | ⏳ Planned |
+| ADR-004 | Why BDD with Cucumber | ✅ Complete |
+| ADR-005 | Why Restful Booker as test application | ✅ Complete |
+| ADR-006 | Why Claude API for AI integration | ✅ Complete |
+| ADR-007 | Why Cucumber.js over other BDD tools | ✅ Complete |
 | ADR-008 | Why GraphQL testing was included | ✅ Complete |
 
 ---
@@ -337,16 +373,25 @@ Every major technology decision is documented with context, alternatives conside
 | Sauce Demo Inventory | `tests/ui/sauceDemo/inventory.spec.ts` | 10 | @smoke @regression | ✅ Passing |
 | Sauce Demo Checkout | `tests/ui/sauceDemo/checkout.spec.ts` | 6 | @smoke @regression @negative | ✅ Passing |
 | Sauce Demo Data-Driven Login | `tests/ui/sauceDemo/dataDriven.spec.ts` | 3 | @regression | ✅ Passing |
+| Sauce Demo Network Interception | `tests/ui/sauceDemo/network.spec.ts` | 4 | @regression @network | ✅ Passing |
+| The Internet — Dropdown | `tests/ui/theInternet/dropdown.spec.ts` | 3 | @smoke @regression @theinternet | ✅ Passing |
+| The Internet — Checkboxes | `tests/ui/theInternet/checkboxes.spec.ts` | 4 | @smoke @regression @theinternet | ✅ Passing |
+| The Internet — Alerts | `tests/ui/theInternet/alerts.spec.ts` | 4 | @smoke @regression @theinternet | ✅ Passing |
+| The Internet — Hovers | `tests/ui/theInternet/hovers.spec.ts` | 5 | @smoke @regression @theinternet | ✅ Passing |
+| The Internet — iFrame | `tests/ui/theInternet/iframe.spec.ts` | 3 | @smoke @regression @theinternet | ✅ Passing |
 | ReqRes Users API | `tests/api/reqres/users.spec.ts` | 7 | @smoke @critical @regression | ✅ Passing |
 | Restful Booker Bookings API | `tests/api/restfulBooker/bookings.spec.ts` | 8 | @smoke @regression @negative @critical | ✅ Passing |
 | Pokémon GraphQL API | `tests/api/graphql/pokemon.spec.ts` | 10 | @smoke @regression @negative @graphql | ✅ Passing |
 | Database — Users Table | `tests/db/users.spec.ts` | 7 | @smoke @regression @negative @db | ✅ Passing |
+| Accessibility — Sauce Demo | `tests/accessibility/sauceDemo.spec.ts` | 3 | @accessibility @smoke @regression | ✅ Passing |
 | BookingBuilder — Unit Tests | `tests/unit/builders/bookingBuilder.spec.ts` | 9 | @unit | ✅ Passing |
 | DataUtils — Unit Tests | `tests/unit/utils/dataUtils.spec.ts` | 9 | @unit | ✅ Passing |
-| **Total (unique)** | | **76** | | ✅ All passing |
+| BDD — Sauce Demo Login | `features/ui/sauceDemo/login.feature` | 5 scenarios | @ui @saucedemo @smoke @regression | ✅ Passing |
+| **Total (unique)** | | **103** | | ✅ All passing |
 
-UI suites (22 tests) run across chromium, firefox, and webkit — 228 total test executions in CI.
-Newman collection: 6 requests, 25 assertions — all passing in CI.
+UI suites run across chromium, firefox, and webkit.
+BDD layer: 5 scenarios, 15 steps — Cucumber.js with World pattern.
+Newman collections: ReqRes (25 assertions) + Stripe (20 assertions) — both passing locally.
 CI pipeline and nightly regression both green.
 
 ---
@@ -357,15 +402,15 @@ After completing v1, this project will be extended with:
 
 | # | Addition | What it demonstrates |
 | --- | --- | --- |
-| 1 | Contract testing with Pact | API architecture awareness |
-| 2 | Mobile testing with Appium | Cross-platform QA |
-| 3 | Deep k6 load testing suite | Performance engineering |
-| 4 | Grafana dashboard from CloudWatch | Observability and monitoring |
-| 5 | Kubernetes test runner | Cloud-native awareness |
-| 6 | GraphQL mutations and subscriptions | Advanced GraphQL |
-| 7 | Visual regression with Percy | Enterprise visual testing |
-| 8 | Full WCAG 2.1 accessibility audit | Deep accessibility |
-| 9 | Data structures and algorithm exercises | CS fundamentals |
+| 1 | SOAP API testing — NumberConversion service | Legacy enterprise API testing |
+| 2 | AI integration — Claude API for test data generation | AI-assisted QA tooling |
+| 3 | k6 performance testing | Performance engineering |
+| 4 | Contract testing with Pact | API architecture awareness |
+| 5 | Mobile testing with Appium | Cross-platform QA |
+| 6 | Visual regression with Applitools/Percy | Enterprise visual testing |
+| 7 | Full WCAG 2.1 accessibility audit | Deep accessibility |
+| 8 | Grafana dashboard from CloudWatch | Observability and monitoring |
+| 9 | Kubernetes test runner | Cloud-native awareness |
 
 ---
 
