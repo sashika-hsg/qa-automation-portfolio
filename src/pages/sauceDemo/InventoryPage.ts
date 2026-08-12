@@ -251,5 +251,4 @@ export class InventoryPage extends BasePage {
   async assertMenuHidden(): Promise<void> {
     await expect(this.menuWrapper).not.toBeVisible();
   }
-
 }
