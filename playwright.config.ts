@@ -4,6 +4,7 @@ import { BASE_URLS } from './src/config/urls';
 
 dotenv.config();
 export default defineConfig({
+  globalSetup: require.resolve('./global-setup'),
   testDir: './tests',
   fullyParallel: false,
   forbidOnly: !!process.env.CI,

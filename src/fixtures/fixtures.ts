@@ -1,9 +1,12 @@
 import { test as base } from '@playwright/test';
-import { LoginPage } from '../pages/sauceDemo/LoginPage';
-import { InventoryPage } from '../pages/sauceDemo/InventoryPage';
-import { CartPage } from '@pages/sauceDemo/CartPage';
-import { CheckoutPage } from '@pages/sauceDemo/CheckoutPage';
+import {
+  LoginPage,
+  InventoryPage,
+  CartPage,
+  CheckoutPage,
+} from '../pages/sauceDemo';
 import { SAUCE_DEMO_USERS, SAUCE_DEMO_PRODUCTS } from '../utils/testData';
+import { BASE_URLS } from '@config/urls';
 
 /**
  * Custom fixture types for the QA Automation Portfolio.
@@ -50,16 +53,19 @@ export const test = base.extend<SauceDemoFixtures>({
    * Provides an InventoryPage instance — already logged in.
    * Use this fixture for tests that need to start on the inventory page.
    */
-  authenticatedPage: async ({ page }, use) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.navigate();
-    await loginPage.login(
-      SAUCE_DEMO_USERS.STANDARD.username,
-      SAUCE_DEMO_USERS.STANDARD.password
-    );
+  authenticatedPage: async ({ browser }, use) => {
+    // Load saved auth state — no UI login needed
+    // global-setup.ts ran once before all tests and saved
+    // cookies + localStorage to .auth/user.json
+    const context = await browser.newContext({
+      storageState: '.auth/user.json',
+    });
+    const page = await context.newPage();
     const inventoryPage = new InventoryPage(page);
+    await page.goto(`${BASE_URLS.SAUCE_DEMO}/inventory.html`);
     await inventoryPage.assertPageLoaded();
     await use(inventoryPage);
+    await context.close();
   },
 
   /**
