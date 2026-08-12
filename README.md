@@ -81,6 +81,23 @@ The framework also documents an intentional **non-pattern decision** — `GraphQ
 
 ---
 
+## Architecture Diagrams
+
+Visual documentation of the framework architecture — created in draw.io.
+
+
+| # | Diagram | What it shows |
+| --- | --- | --- |
+| 01 | [System Context](docs/design/diagrams/01-system-context.svg) | Framework boundary — external systems and trigger flow |
+| 02 | [Container](docs/design/diagrams/02-container-diagram.svg) | Internal modules — test types, framework components, infrastructure |
+| 03 | [Page Object Hierarchy](docs/design/diagrams/03-page-object-hierarchy.svg) | IPage → BasePage → all page objects |
+| 04 | [API Client Hierarchy](docs/design/diagrams/04-api-client-hierarchy.svg) | ApiClient → REST clients — deliberate non-inheritance for GraphQL and Stripe |
+| 05 | [CI/CD Pipeline](docs/design/diagrams/05-cicd-pipeline.svg) | What triggers what — quality gate, parallel execution |
+| 06 | [BDD Flow](docs/design/diagrams/06-bdd-flow.svg) | Feature file → step definitions → World → page objects |
+| 07 | [Database Layer](docs/design/diagrams/07-database-layer.svg) | Singleton → Repository → cross-service validation |
+
+---
+
 ## TypeScript Language Depth
 
 Beyond basic syntax, this framework deliberately exercises core TypeScript and OOP constructs — each implemented where it genuinely fits, not forced in for the sake of coverage.
@@ -342,6 +359,7 @@ This project includes the complete QA lifecycle — not just scripts.
 | Test Summary Report | `docs/qa-lifecycle/TEST_SUMMARY_REPORT.md` | ✅ Complete |
 | Usability Evaluation | `docs/usability/HEURISTICS_EVALUATION.md` | ✅ Complete |
 | Design Patterns | `docs/design/DESIGN_PATTERNS.md` | ✅ Complete |
+| Architecture Diagrams | `docs/design/diagrams/` | ✅ Complete |
 | Commands Reference | `docs/guides/COMMANDS_REFERENCE.md` | ✅ Complete |
 | Merge Conflict Guide | `docs/guides/MERGE_CONFLICT_RESOLUTION_GUIDE.md` | ✅ Complete |
 | Framework Checklist | `docs/COMPLETENESS_CHECKLIST.md` | ✅ Complete |
