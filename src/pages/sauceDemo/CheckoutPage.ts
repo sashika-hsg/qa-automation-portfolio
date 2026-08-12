@@ -12,15 +12,15 @@ import { BasePage } from '../base/BasePage';
  */
 export class CheckoutPage extends BasePage {
   //Step 1 - information form
-  private readonly firstNameInput = this.page.locator(
-    '[data-test = "firstName"]'
-  );
-  private readonly lastNameInput = this.page.locator('[data-test ="lastName"]');
-  private readonly postalCodeInput = this.page.locator(
-    '[data-test= "postalCode"]'
-  );
-  private readonly continueButton = this.page.locator('[data-test="continue"]');
-  private readonly errorMessage = this.page.locator('[data-test="error"]');
+  private readonly firstNameInput = this.page.getByPlaceholder('First Name');
+  private readonly lastNameInput = this.page.getByPlaceholder('Last Name');
+  private readonly postalCodeInput =
+    this.page.getByPlaceholder('Zip/Postal Code');
+
+  private readonly continueButton = this.page.getByRole('button', {
+    name: 'Continue',
+  });
+  private readonly errorMessage = this.page.getByTestId('error');
 
   //Step 2 - overview
   private readonly finishButton = this.page.locator('[data-test ="finish"]');
@@ -31,9 +31,9 @@ export class CheckoutPage extends BasePage {
 
   //Step 3 - order confirmation
   private readonly completeHeader = this.page.locator('.complete-header');
-  private readonly backHomeButton = this.page.locator(
-    '[data-test="back-to-products"]'
-  );
+  private readonly backHomeButton = this.page.getByRole('button', {
+    name: 'Back Home',
+  });
 
   /**
    * Navigate to the checkout information page (step one).
