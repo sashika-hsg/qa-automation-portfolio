@@ -5,7 +5,13 @@ import {
   World,
   setDefaultTimeout,
 } from '@cucumber/cucumber';
-import { Browser, BrowserContext, Page, chromium, selectors } from '@playwright/test';
+import {
+  Browser,
+  BrowserContext,
+  Page,
+  chromium,
+  selectors,
+} from '@playwright/test';
 import { BASE_URLS } from '../src/config/urls';
 import { LoginPage, InventoryPage } from '../src/pages/sauceDemo';
 

@@ -43,6 +43,7 @@ export class IframePage extends BasePage {
     // Use TinyMCE's JavaScript API to set content directly
     // This bypasses iframe interaction issues entirely
     await this.page.evaluate((content) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (window as any).tinymce.activeEditor.setContent(content);
     }, text);
   }
