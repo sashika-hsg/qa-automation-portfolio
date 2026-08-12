@@ -252,11 +252,4 @@ export class InventoryPage extends BasePage {
     await expect(this.menuWrapper).not.toBeVisible();
   }
 
-  /**
-   * Click a product name to navigate to detail page
-   * @param productName - exact product name as displayed
-   */
-  async clickProductName(productName: string): Promise<void> {
-    await this.inventoryItemNames.getByText(productName).click();
-  }
 }
