@@ -8,12 +8,12 @@ import { BasePage } from '../base/BasePage';
  */
 export class LoginPage extends BasePage {
   //selectors - private so nothing outside this touches them.
-  private readonly usernameInput = this.page.locator('[data-test="username"]');
-  private readonly passwordInput = this.page.locator('[data-test="password"]');
-  private readonly loginButton = this.page.locator(
-    '[data-test="login-button"]'
-  );
-  private readonly errorMessage = this.page.locator('[data-test="error"]');
+  private readonly usernameInput = this.page.getByPlaceholder('Username');
+  private readonly passwordInput = this.page.getByPlaceholder('password');
+  private readonly loginButton = this.page.getByRole('button', {
+    name: 'Login',
+  });
+  private readonly errorMessage = this.page.getByTestId('error');
   private readonly errorButton = this.page.locator('.error-button');
 
   /**

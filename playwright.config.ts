@@ -23,6 +23,7 @@ export default defineConfig({
   ],
 
   use: {
+    testIdAttribute: 'data-test',
     baseURL: BASE_URLS.SAUCE_DEMO ?? 'https://www.saucedemo.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
