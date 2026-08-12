@@ -20,13 +20,15 @@ import * as path from 'path';
  */
 async function globalSetup(): Promise<void> {
   // Skip if running DB or API tests only
-  if (process.env.TEST_SUITE === 'db' || process.env.TEST_SUITE === 'api') {
-    console.log('Skipping global setup for non-UI test suite');
+  if (
+    process.env.TEST_SUITE === 'db' ||
+    process.env.TEST_SUITE === 'api' ||
+    process.env.TEST_SUITE === 'unit'
+  ) {
     return;
   }
   const browser = await chromium.launch();
   const context = await browser.newContext({
-    storageState: '.auth/user.json',
     baseURL: process.env.SAUCE_DEMO_BASE_URL ?? 'https://www.saucedemo.com',
   });
   const page = await context.newPage();
