@@ -1,5 +1,6 @@
 import { test, expect } from '../../../src/fixtures/fixtures';
 import { SAUCE_DEMO_PRODUCTS } from '../../../src/utils/testData';
+import { BASE_URLS } from '@config/urls';
 
 test.describe('Sauce Demo - Inventory', () => {
   test('validate whether 6 products are displayed on page load @smoke @critical', async ({
@@ -65,7 +66,7 @@ test.describe('Sauce Demo - Inventory', () => {
     expect(names).toEqual(sorted);
   });
 
-  test('valiate whether products can be sorted by name from Z to A @regression', async ({
+  test('validate whether products can be sorted by name from Z to A @regression', async ({
     authenticatedPage,
   }) => {
     await authenticatedPage.sortProducts('za');
@@ -74,7 +75,7 @@ test.describe('Sauce Demo - Inventory', () => {
     expect(names).toEqual(sorted);
   });
 
-  test('validate navigation to cart page @regression', async ({
+  test('validate navigation to cart page @regression @critical', async ({
     authenticatedPage,
   }) => {
     await authenticatedPage.addProductToCart(SAUCE_DEMO_PRODUCTS.BACKPACK);
@@ -82,10 +83,118 @@ test.describe('Sauce Demo - Inventory', () => {
     await expect(authenticatedPage['page']).toHaveURL(/cart/);
   });
 
-  test('validate successful login @regression @critical', async ({
+  test('validate successful logout @regression @critical', async ({
     authenticatedPage,
   }) => {
     await authenticatedPage.logout();
     await expect(authenticatedPage['page']).toHaveURL(/saucedemo\.com\/$/);
+  });
+
+  test('validate reset app state clears the cart @regression', async ({
+    authenticatedPage,
+  }) => {
+    //Adds items to cart
+    await authenticatedPage.addProductToCart(SAUCE_DEMO_PRODUCTS.BACKPACK);
+    expect(await authenticatedPage.getCartCount()).toBe(1);
+    //reset via hamberger menu
+    await authenticatedPage.resetAppState();
+    expect(await authenticatedPage.getCartCount()).toBe(0);
+  });
+
+  test('validate sort dropdwon is enabled @smoke', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.assertSortDropdownEnabled();
+  });
+
+  test('validate hamburger menu opens and closes @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.openMenu();
+    await authenticatedPage.assertMenuVisible();
+    await authenticatedPage.closeMenu();
+    await authenticatedPage.assertMenuHidden();
+  });
+
+  test('validate about link navigates to Sauce Labs website @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.goToAbout();
+    expect(await authenticatedPage.getCurrentUrl()).toBe(
+      BASE_URLS.SAUCE_DEMO_ABOUT
+    );
+  });
+
+  test('validate all items link navigate to inventory page @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.goToCart();
+    await authenticatedPage.goToAllItems();
+    expect(await authenticatedPage.getCurrentUrl()).toContain('inventory');
+  });
+
+  test('validate cart badge count updates correctly through add and remove lifecycle @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.addProductToCart(SAUCE_DEMO_PRODUCTS.BACKPACK);
+    await authenticatedPage.assertCartBadgeCount(1);
+    await authenticatedPage.addProductToCart(SAUCE_DEMO_PRODUCTS.BIKE_LIGHT);
+    await authenticatedPage.assertCartBadgeCount(2);
+    await authenticatedPage.removeProductFromCart(SAUCE_DEMO_PRODUCTS.BACKPACK);
+    await authenticatedPage.assertCartBadgeCount(1);
+    await authenticatedPage.removeProductFromCart(
+      SAUCE_DEMO_PRODUCTS.BIKE_LIGHT
+    );
+    await authenticatedPage.assertCartBadgeHidden();
+  });
+
+  test('validate product images have alt attributes @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.assertProductImagesHaveAltAttributes();
+  });
+
+  test('valiadte clicking product name navigates to detail page @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.clickProductName(SAUCE_DEMO_PRODUCTS.BACKPACK);
+    expect(await authenticatedPage.getCurrentUrl()).toContain('inventory-item');
+  });
+
+  test('validate product names match expected catalogue @regression', async ({
+    authenticatedPage,
+  }) => {
+    const names = await authenticatedPage.getProductNames();
+    const expectedProducts = Object.values(SAUCE_DEMO_PRODUCTS);
+    expectedProducts.forEach((product) => expect(names).toContain(product));
+  });
+
+  test('validate all product prices are greater than zero @regression', async ({
+    authenticatedPage,
+  }) => {
+    const prices = await authenticatedPage.getProductPrices();
+    expect(prices.length).toBe(6);
+    prices.forEach((price) => expect(price).toBeGreaterThan(0));
+  });
+
+  test('validate all products have add to cart button @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.assertAllProductsHaveAddToCartButton();
+  });
+
+  test('validate cart persists after page reloard @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.addProductToCart(SAUCE_DEMO_PRODUCTS.BACKPACK);
+    expect(await authenticatedPage.getCartCount()).toBe(1);
+    await authenticatedPage.navigate();
+    expect(await authenticatedPage.getCartCount()).toBe(1);
+  });
+
+  test('validate sort dropdwon defaults to name A to Z @regression', async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.assertSortDropdownValue('az');
   });
 });
