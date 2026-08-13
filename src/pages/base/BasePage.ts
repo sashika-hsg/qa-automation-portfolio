@@ -24,6 +24,8 @@ export abstract class BasePage implements IPage {
 
   /**
    * Wait for the page to fully load
+   * this is a concrete shared method
+   * this is called inside the navigate implementation of the subclasses.
    */
   async waitForPageLoad(): Promise<void> {
     await this.page.waitForLoadState('domcontentloaded');

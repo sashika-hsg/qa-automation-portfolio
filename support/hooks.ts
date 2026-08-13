@@ -5,7 +5,13 @@ import {
   World,
   setDefaultTimeout,
 } from '@cucumber/cucumber';
-import { Browser, BrowserContext, Page, chromium } from '@playwright/test';
+import {
+  Browser,
+  BrowserContext,
+  Page,
+  chromium,
+  selectors,
+} from '@playwright/test';
 import { BASE_URLS } from '../src/config/urls';
 import { LoginPage, InventoryPage } from '../src/pages/sauceDemo';
 
@@ -26,6 +32,10 @@ export class CustomWorld extends World {
 }
 
 setWorldConstructor(CustomWorld);
+// Configure testId attribute for BDD context
+// playwright.config.ts testIdAttribute only applies to Playwright test runner
+// For Cucumber we need to configure it separately
+selectors.setTestIdAttribute('data-test');
 
 // Set default timeout for all steps — performance_glitch_user needs extra time
 setDefaultTimeout(30000);

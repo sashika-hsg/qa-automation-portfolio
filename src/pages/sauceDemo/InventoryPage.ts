@@ -13,11 +13,33 @@ export class InventoryPage extends BasePage {
   private readonly inventoryItems = this.page.locator('.inventory_item');
   private readonly cartBadge = this.page.locator('.shopping_cart_badge');
   private readonly cartIcon = this.page.locator('.shopping_cart_link');
-  private readonly sortDropdown = this.page.locator(
-    '[data-test="product-sort-container"]'
+  private readonly sortDropdown = this.page.getByTestId(
+    'product-sort-container'
   );
-  private readonly menuButton = this.page.locator('#react-burger-menu-btn');
+  private readonly menuButton = this.page.getByRole('button', {
+    name: 'Open Menu',
+  });
   private readonly logoutLink = this.page.locator('#logout_sidebar_link');
+  private readonly menuWrapper = this.page.locator('.bm-menu-wrap');
+  private readonly closeMenuButton = this.page.getByRole('button', {
+    name: 'Close Menu',
+  });
+  private readonly allItemsLink = this.page.getByRole('link', {
+    name: 'All Items',
+  });
+  private readonly resetAppStateLink = this.page.getByRole('link', {
+    name: 'Reset App State',
+  });
+  private readonly aboutLink = this.page.getByRole('link', { name: 'About' });
+  private readonly inventoryItemImages = this.page.locator(
+    '.inventory_item img'
+  );
+  private readonly addToCartButtons = this.page.locator(
+    '.inventory_item button'
+  );
+  private readonly inventoryItemNames = this.page.locator(
+    '.inventory_item_name'
+  );
 
   /**
    * Navigate to the inventory page directly.
@@ -123,5 +145,110 @@ export class InventoryPage extends BasePage {
       result.push(parseFloat(text.replace('$', '')));
     }
     return result;
+  }
+  /**
+   * Open the hamburger menu
+   */
+  async openMenu(): Promise<void> {
+    await this.menuButton.click();
+    await this.menuWrapper.waitFor({ state: 'visible' });
+  }
+
+  /**
+   * Close the hamburger menu
+   */
+  async closeMenu(): Promise<void> {
+    await this.closeMenuButton.click();
+    await this.menuWrapper.waitFor({ state: 'hidden' });
+  }
+
+  /**
+   * Rests app state via hamburger menu.
+   * Clears cart and resets all product buttons
+   */
+  async resetAppState(): Promise<void> {
+    await this.openMenu();
+    await this.resetAppStateLink.click();
+    await this.page.waitForLoadState('domcontentloaded');
+    await this.navigate();
+  }
+
+  /**
+   * Navigate to All Items via hamburger menu
+   */
+  async goToAllItems(): Promise<void> {
+    await this.openMenu();
+    await this.allItemsLink.click();
+  }
+
+  /**
+   * Navigate to About page via hamburger menu
+   * Verfied Sauce Labs website opens.
+   */
+  async goToAbout(): Promise<void> {
+    await this.openMenu();
+    await this.aboutLink.click();
+  }
+  /**
+   * Assert the sort dropdown is enabled.
+   */
+  async assertSortDropdownEnabled(): Promise<void> {
+    await expect(this.sortDropdown).toBeEnabled();
+  }
+  /**
+   * Assert cart badge shows expected count
+   */
+  async assertCartBadgeCount(expectedCount: number): Promise<void> {
+    await expect(this.cartBadge).toHaveText(String(expectedCount));
+  }
+
+  /**
+   * Assert cart badge is not visible
+   */
+  async assertCartBadgeHidden(): Promise<void> {
+    await expect(this.cartBadge).not.toBeVisible();
+  }
+
+  /**
+   * Assert first product image has alt attribute
+   */
+  async assertProductImagesHaveAltAttributes(): Promise<void> {
+    await expect(this.inventoryItemImages.first()).toHaveAttribute('alt', /.+/);
+  }
+
+  /**
+   * Click a product name to navigate to detail page
+   */
+  async clickProductName(productName: string): Promise<void> {
+    await this.inventoryItemNames.getByText(productName).click();
+  }
+
+  /**
+   * Assert all products have add to cart button
+   */
+  async assertAllProductsHaveAddToCartButton(): Promise<void> {
+    const count = await this.addToCartButtons.count();
+    expect(count).toBe(6);
+  }
+
+  /**
+   * Assert sort dropdown has expected value
+   */
+  async assertSortDropdownValue(expectedValue: string): Promise<void> {
+    await expect(this.sortDropdown).toHaveValue(expectedValue);
+  }
+
+  /**
+   * Assert hamburger menu is visible
+   */
+  async assertMenuVisible(): Promise<void> {
+    await expect(this.menuWrapper).toBeVisible();
+  }
+
+  /**
+   * Assert hamburger menu is hidden
+   */
+  async assertMenuHidden(): Promise<void> {
+    await expect(this.menuWrapper).not.toBeVisible();
   }
 }

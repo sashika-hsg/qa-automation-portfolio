@@ -4,6 +4,7 @@ import { BASE_URLS } from './src/config/urls';
 
 dotenv.config();
 export default defineConfig({
+  globalSetup: require.resolve('./global-setup'),
   testDir: './tests',
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -22,6 +23,7 @@ export default defineConfig({
   ],
 
   use: {
+    testIdAttribute: 'data-test',
     baseURL: BASE_URLS.SAUCE_DEMO ?? 'https://www.saucedemo.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
