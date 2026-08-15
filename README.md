@@ -24,7 +24,7 @@ Senior QA Engineer | SDET | Melbourne, Australia
 
 | Version | Status | Focus |
 | --- | --- | --- |
-| **v1 — Current** | 🔄 In progress — 103 unique Playwright tests + 5 BDD scenarios + 45 Newman assertions, green CI pipeline | Core automation framework |
+| **v1 — Current** | 🔄 In progress — 116 unique Playwright tests + 5 BDD scenarios + 45 Newman assertions, green CI pipeline | Core automation framework |
 | **v2 — Planned** | ⏳ Not started | Advanced tooling and cloud |
 
 ---
@@ -35,20 +35,21 @@ This is not a tutorial project. Every design decision is intentional, documented
 
 | Skill | Tool | Status |
 | --- | --- | --- |
-| UI automation | Playwright + POM | ✅ 36 tests across Sauce Demo + The Internet, 3 browsers |
+| UI automation | Playwright + POM | ✅ 62 tests across Sauce Demo + The Internet, 3 browsers |
 | API testing — REST | Playwright request context + AJV | ✅ ReqRes + Restful Booker, 15 tests |
-| Authentication flows | Static API key + cookie-based token + Basic Auth | ✅ Three auth models implemented |
+| Authentication flows | Static API key + cookie-based token + Basic Auth + `storageState` session persistence | ✅ Four auth models implemented |
 | API testing — GraphQL | Playwright + custom GraphQLClient | ✅ 10 tests, Pokémon GraphQL API |
 | Payment API testing | Stripe sandbox + Postman/Newman | ✅ 6 requests, 20 assertions, full payment lifecycle |
 | Database validation | PostgreSQL + Docker + Repository pattern | ✅ 7 tests, cross-validated against API |
 | API collections | Postman + Newman | ✅ 45 assertions (ReqRes 25 + Stripe 20), CI-integrated |
-| Unit testing | Playwright test runner | ✅ 18 tests — framework code tested in isolation |
+| Unit testing | Playwright test runner | ✅ 19 tests — framework code tested in isolation |
 | Schema validation | AJV | ✅ Implemented across all API tests |
-| TypeScript language depth | Generics, accessors, abstract classes, utility types | ✅ 8 core constructs implemented and test-covered |
+| TypeScript language depth | Generics, discriminated unions, utility types, enums, accessors, abstract classes | ✅ 12+ core constructs implemented and test-covered |
 | BDD | Cucumber.js + Gherkin | ✅ 5 scenarios, login feature, World pattern |
 | Accessibility testing | axe-core | ✅ 3 tests, WCAG 2.1 AA, colour contrast, keyboard navigation |
 | Network interception | Playwright `page.route()` | ✅ Request mocking, blocking, header modification |
 | iframe handling | Playwright `frameLocator()` | ✅ TinyMCE editor interaction |
+| Locator strategy | `getByRole`, `getByPlaceholder`, `getByTestId`, `getByText` | ✅ Semantic locators across Sauce Demo page objects |
 | UI element interactions | Dropdowns, checkboxes, alerts, hovers | ✅ The Internet test suite |
 | Security testing | Custom security spec | ⏳ Phase 8 |
 | Performance testing | k6 | ⏳ Phase 8 |
@@ -85,7 +86,6 @@ The framework also documents an intentional **non-pattern decision** — `GraphQ
 
 Visual documentation of the framework architecture — created in draw.io.
 
-
 | # | Diagram | What it shows |
 | --- | --- | --- |
 | 01 | [System Context](docs/design/diagrams/01-system-context.svg) | Framework boundary — external systems and trigger flow |
@@ -106,12 +106,14 @@ Beyond basic syntax, this framework deliberately exercises core TypeScript and O
 | --- | --- |
 | Abstract classes & methods | `BasePage` — every page object must implement `navigate()` and `assertPageLoaded()` |
 | Interfaces (`implements`) | `BasePage implements IPage` — compiler-enforced contract |
+| Generics with default types | `GraphQLClient.query<T = unknown>()` — type-safe, reusable query method |
+| Discriminated unions | `ApiResult<T>` — `{ success: true; data: T } | { success: false; error: string }`, narrows in `if/else` |
 | Error handling (`try/catch`, `throw`) | `ApiClient` — every HTTP method wraps failures with contextual error messages |
-| `switch/case` | `StatusCodeHandler` — maps HTTP status codes to categories |
 | `get`/`set` accessors | `BookingBuilder` — validated property access with custom errors |
 | Array methods (`filter`, `find`, `reduce`) | `DataUtils` — booking aggregation and search utilities |
-| Generic constraints (`<T extends object>`) | `UserRepository.query<T>()` — type-safe, reusable query method |
-| Utility types (`Pick`, `Omit`, `Required`, `Readonly`) | `Booking.ts` — derived types without duplicating the base interface |
+| Utility types (`Pick`, `Omit`, `Required`, `Readonly`, `Partial`) | `Booking.ts` — derived types without duplicating the base interface |
+| Enums | `HttpMethod`, `HttpStatus`, `UserRole`, `TestStatus`, `TestSeverity`, `TestCategory` — prevent magic strings/numbers |
+| `unknown` over `any` | `GraphQLClient`, `userRepository` — type-safe handling of untyped API/DB responses |
 
 ---
 
@@ -388,14 +390,14 @@ Every major technology decision is documented with context, alternatives conside
 | Suite | File | Tests | Tags | Status |
 | --- | --- | --- | --- | --- |
 | Sauce Demo Login | `tests/ui/sauceDemo/login.spec.ts` | 6 | @smoke @regression @negative | ✅ Passing |
-| Sauce Demo Inventory | `tests/ui/sauceDemo/inventory.spec.ts` | 10 | @smoke @regression | ✅ Passing |
+| Sauce Demo Inventory | `tests/ui/sauceDemo/inventory.spec.ts` | 23 | @smoke @critical @regression | ✅ Passing |
 | Sauce Demo Checkout | `tests/ui/sauceDemo/checkout.spec.ts` | 6 | @smoke @regression @negative | ✅ Passing |
 | Sauce Demo Data-Driven Login | `tests/ui/sauceDemo/dataDriven.spec.ts` | 3 | @regression | ✅ Passing |
 | Sauce Demo Network Interception | `tests/ui/sauceDemo/network.spec.ts` | 4 | @regression @network | ✅ Passing |
 | The Internet — Dropdown | `tests/ui/theInternet/dropdown.spec.ts` | 3 | @smoke @regression @theinternet | ✅ Passing |
-| The Internet — Checkboxes | `tests/ui/theInternet/checkboxes.spec.ts` | 4 | @smoke @regression @theinternet | ✅ Passing |
+| The Internet — Checkboxes | `tests/ui/theInternet/checkbox.spec.ts` | 4 | @smoke @regression @theinternet | ✅ Passing |
 | The Internet — Alerts | `tests/ui/theInternet/alerts.spec.ts` | 4 | @smoke @regression @theinternet | ✅ Passing |
-| The Internet — Hovers | `tests/ui/theInternet/hovers.spec.ts` | 5 | @smoke @regression @theinternet | ✅ Passing |
+| The Internet — Hovers | `tests/ui/theInternet/hovers.spec.ts` | 6 | @smoke @regression @theinternet | ✅ Passing |
 | The Internet — iFrame | `tests/ui/theInternet/iframe.spec.ts` | 3 | @smoke @regression @theinternet | ✅ Passing |
 | ReqRes Users API | `tests/api/reqres/users.spec.ts` | 7 | @smoke @critical @regression | ✅ Passing |
 | Restful Booker Bookings API | `tests/api/restfulBooker/bookings.spec.ts` | 8 | @smoke @regression @negative @critical | ✅ Passing |
@@ -403,12 +405,12 @@ Every major technology decision is documented with context, alternatives conside
 | Database — Users Table | `tests/db/users.spec.ts` | 7 | @smoke @regression @negative @db | ✅ Passing |
 | Accessibility — Sauce Demo | `tests/accessibility/sauceDemo.spec.ts` | 3 | @accessibility @smoke @regression | ✅ Passing |
 | BookingBuilder — Unit Tests | `tests/unit/builders/bookingBuilder.spec.ts` | 9 | @unit | ✅ Passing |
-| DataUtils — Unit Tests | `tests/unit/utils/dataUtils.spec.ts` | 9 | @unit | ✅ Passing |
+| DataUtils — Unit Tests | `tests/unit/utils/dataUtils.spec.ts` | 10 | @unit | ✅ Passing |
 | BDD — Sauce Demo Login | `features/ui/sauceDemo/login.feature` | 5 scenarios | @ui @saucedemo @smoke @regression | ✅ Passing |
-| **Total (unique)** | | **103** | | ✅ All passing |
+| **Total (unique Playwright tests)** | | **116** | | ✅ All passing |
 
 UI suites run across chromium, firefox, and webkit.
-BDD layer: 5 scenarios, 15 steps — Cucumber.js with World pattern.
+BDD layer: 5 scenarios, 15 steps — Cucumber.js with World pattern (counted separately from the 116 above).
 Newman collections: ReqRes (25 assertions) + Stripe (20 assertions) — both passing locally.
 CI pipeline and nightly regression both green.
 
