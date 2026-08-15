@@ -38,7 +38,7 @@
     "lint:fix": "eslint . --ext .ts --fix --ignore-pattern node_modules/ --ignore-pattern dist/",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "ai:generate-data": "ts-node src/ai/AiDataGenerator.ts",
+    "ai:generate-data": "ts-node -r tsconfig-paths/register src/ai/generateData.ts",
     "ai:suggest-commit": "ts-node src/ai/AiCommitHelper.ts"
   },
   "devDependencies": {
