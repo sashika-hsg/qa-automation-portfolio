@@ -2,18 +2,18 @@
 
 > Track all remaining items for v1 completion and v2 roadmap.
 > Check off items as they are implemented and merged to main.
-> Last updated: 31 July 2026
+> Last updated: 14 August 2026
 
 ---
 
 ## Playwright Constructs
 
 ### Locators
-- [ ] `getByRole()` — refactor existing page object locators
-- [ ] `getByText()` — add to inventory or checkout page
+- [x] `getByRole()` ✅ — `LoginPage.ts`, `InventoryPage.ts`, `CheckoutPage.ts`
+- [x] `getByText()` ✅ — `InventoryPage.clickProductName()`
 - [ ] `getByLabel()` — add to form inputs in checkout
-- [ ] `getByPlaceholder()` — add to login page inputs
-- [ ] `getByTestId()` — Sauce Demo uses `data-test` attributes, already possible
+- [x] `getByPlaceholder()` ✅ — `LoginPage.ts`, `CheckoutPage.ts`
+- [x] `getByTestId()` ✅ — `LoginPage.ts`, `InventoryPage.ts`
 - [ ] XPath locators — add at least one example in a page object
 
 ### Page Actions
@@ -24,11 +24,11 @@
 - [ ] `press()` — keyboard key press e.g. `Enter`, `Tab`, `Escape`
 
 ### Assertions
-- [ ] `toBeEnabled()` — assert button/input is enabled
-- [ ] `toHaveValue()` — assert input field has a specific value
+- [x] `toBeEnabled()` ✅ — `InventoryPage.assertSortDropdownEnabled()`
+- [x] `toHaveValue()` ✅ — `InventoryPage.assertSortDropdownValue()`
 
 ### Waits
-- [ ] `waitForSelector()` — explicit wait for an element to appear
+- [ ] `waitForSelector()` — currently using `locator.waitFor({ state })` in `InventoryPage.ts`; note the distinction if asked in interview
 
 ### Screenshots
 - [ ] `page.screenshot({ path: 'screenshot.png' })` — explicit screenshot in a test
@@ -47,8 +47,8 @@
 ### Advanced Concepts
 - [x] Network interception ✅ — `page.route()`, `network.spec.ts`
 - [ ] Multiple tabs — The Internet `/windows`
-- [ ] `storageState` — persist login auth state across tests
-- [ ] `browser.newContext()` — explicit browser context creation
+- [x] `storageState` ✅ — `authenticatedPage` fixture, `.auth/user.json` — `src/fixtures/fixtures.ts`
+- [x] `browser.newContext()` ✅ — `authenticatedPage` fixture — `src/fixtures/fixtures.ts`
 - [ ] Multiple contexts — demonstrate two users in same test
 - [ ] `userAgent` — custom user agent in config or test
 
@@ -60,6 +60,73 @@
 - [ ] Headed mode — document how to run tests headed
 - [ ] Trace viewer — document usage in README
 - [ ] `page.screenshot()` — explicit screenshot captured in a test
+
+---
+
+## TypeScript Constructs
+
+### Core Type System
+- [x] Interfaces ✅ — `IPage`, `ApiResponse<T>`, `ApiError` (27 interfaces across `src/`)
+- [x] Type aliases ✅ — `ApiResult<T>`, `UpdateBookingRequest`, `GuestName` — `src/models/`
+- [x] Generics ✅ — `ApiResponse<T>`, `PaginatedApiResponse<T>`, `UserRepository.query<T>()`
+- [x] Generic default types ✅ — `query<T = unknown>()` — `GraphQLClient.ts`
+- [x] `unknown` ✅ — used idiomatically over `any` — `GraphQLClient.ts`, `userRepository.ts`
+- [x] Discriminated unions ✅ — `ApiResult<T>` (`success: true/false`) — `ApiResponse.ts`
+- [ ] `ApiResult<T>` actually consumed by a client method — currently defined but unused; wire into `ReqResClient` or `RestfulBookerClient`
+- [ ] Type guards / type predicates (`x is Booking`) — add at least one custom predicate, e.g. in `dataUtils.ts` or a schema validator
+- [ ] `typeof` narrowing in application code — currently only in test assertions (`users.spec.ts`), not in `src/`
+- [ ] `instanceof` narrowing — no occurrences yet; needs a genuine use case (e.g. custom error classes)
+- [ ] `never` as an active type (not just prose) — add exhaustiveness check, e.g. `default` branch on a `switch` over `HttpStatus` or `TestCategory`
+- [ ] Union type literals — only one example (`TestResult.ts`); add 1–2 more deliberate unions
+- [ ] Intersection types (`&`) — no occurrences yet
+
+### Utility Types
+- [x] `Partial<T>` ✅ — `UpdateBookingRequest`, `RestfulBookerClient.ts`
+- [x] `Pick<T>` ✅ — `GuestName` — `Booking.ts`
+- [x] `Omit<T>` ✅ — `BookingWithoutDates` — `Booking.ts`
+- [x] `Required<T>` ✅ — `CompleteBooking` — `Booking.ts`
+- [x] `Readonly<T>` ✅ — `ConfirmedBooking` — `Booking.ts`
+- [x] `Record<K,V>` ✅ — `ApiClient.ts`, `GraphQLClient.ts`, `TestResult.ts`, `login.steps.ts`
+- [ ] Mapped types (custom, not built-in) — build one from scratch to show understanding of the mechanism behind `Pick`/`Omit`
+- [ ] Conditional types (`T extends U ? X : Y`) — not yet used; optional/advanced
+
+### OOP & Class Features
+- [x] Abstract classes ✅ — `BasePage` — `src/pages/base/BasePage.ts`
+- [x] Abstract methods ✅ — `navigate()`, `assertPageLoaded()` — `BasePage.ts`
+- [x] `implements` (interface contract) ✅ — `BasePage implements IPage`
+- [x] Inheritance ✅ — `ApiClient` → `ReqResClient`, `RestfulBookerClient`
+- [x] Accessors (`get`/`set`) ✅ — `BookingBuilder.ts`
+- [x] Enums ✅ — `HttpMethod`, `HttpStatus`, `UserRole`, `TestStatus`, `TestSeverity`, `TestCategory`
+- [ ] Custom error classes (`class extends Error`) — none yet; pairs naturally with `instanceof` narrowing gap above
+- [ ] Access modifiers beyond `protected` — confirm `private` is used somewhere deliberate, or add one
+- [ ] Static members (`static` properties/methods) — not yet used; natural fit for `ConfigManager`-style singleton
+
+### Modern Syntax / Idioms
+- [x] Nullish coalescing (`??`) ✅ — 9 occurrences across `src/`
+- [ ] Optional chaining (`?.`) — zero occurrences anywhere in codebase; add where accessing nested/possibly-undefined data
+- [ ] Non-null assertion (`!`) — zero occurrences; fine to intentionally avoid, but be ready to explain the trade-off
+- [x] Async/await typing (`Promise<T>`) ✅ — 38 files use `async`
+
+### Compiler / Config Understanding
+- [ ] Document which `strictNullChecks` / strict flags are enabled in `tsconfig.json` and why
+- [ ] Index signatures (`[key: string]: T`) — not yet used
+
+---
+
+## Design Diagrams
+
+> Created in draw.io, stored under `docs/design/diagrams/`.
+
+- [x] 01 — System Context ✅ — `01-system-context.svg`
+- [x] 02 — Container Diagram ✅ — `02-container-diagram.svg`
+- [x] 03 — Page Object Hierarchy ✅ — `03-page-object-hierarchy.svg`
+- [x] 04 — API Client Hierarchy ✅ — `04-api-client-hierarchy.svg`
+- [x] 05 — CI/CD Pipeline ✅ — `05-cicd-pipeline.svg`
+- [x] 06 — BDD Flow ✅ — `06-bdd-flow.svg`
+- [x] 07 — Database Layer ✅ — `07-database-layer.svg`
+- [ ] 08 — DB/API Cross-Validation Flow — visualise how DB tests validate against API-created data, your key differentiator
+- [ ] 09 — Auth Models Comparison — static API key vs cookie token vs Basic Auth, side by side
+- [ ] Diagrams referenced in README table (`docs/design/diagrams/`) kept in sync with any new diagram added here
 
 ---
 
@@ -136,8 +203,10 @@
 
 | Area | Items | Done | Remaining |
 |---|---|---|---|
-| Playwright constructs | 25 | 8 | 17 |
+| Playwright constructs | 25 | 15 | 10 |
+| TypeScript constructs | 36 | 20 | 16 |
+| Design diagrams | 9 | 7 | 2 |
 | Framework features | 15 | 10 | 5 |
 | Documentation | 14 | 13 | 1 |
 | V2 roadmap | 14 | 0 | 14 |
-| **Total** | **68** | **31** | **37** |
+| **Total** | **113** | **65** | **48** |
