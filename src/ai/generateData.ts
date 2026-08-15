@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { TestDataGenerator } from '@ai/TestDataGenerator';
 import { logger } from '@utils/logger';
 

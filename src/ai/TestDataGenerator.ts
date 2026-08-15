@@ -200,6 +200,17 @@ Return ONLY valid JSON matching this exact schema. No explanation. No markdown. 
       );
     }
 
+    // checkin must actually be in the future, not just before checkout —
+    // Claude doesn't reliably know "today" from the prompt alone
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (checkin < today) {
+      throw new Error(
+        `Invalid checkin date: ${booking.bookingdates.checkin} is in the past ` +
+          `(today is ${today.toISOString().split('T')[0]})`
+      );
+    }
+
     logger.info('Generated valid booking via Claude API', {
       firstname: booking.firstname,
       lastname: booking.lastname,
