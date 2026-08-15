@@ -67,17 +67,20 @@ function sleep(ms: number): Promise<void> {
 
 /**
  * Determines whether an error is worth retrying.
- * - 429 (rate limit) and 5xx (server errors) are transient — retry
- * - 400/401/403 (bad request, auth) are not — fail fast
+ * - 401/403 (auth/permission) are not — the key itself is bad, retrying
+ *   won't fix that.
+ * - Everything else — 429, 5xx, malformed JSON, schema/business-rule
+ *   validation failures — IS retried. Model output is non-deterministic,
+ *   so a validation failure on one call is often just noise that a
+ *   second call won't repeat.
  */
 function isRetryableError(error: unknown): boolean {
   if (error instanceof Anthropic.APIError) {
-    return (
-      error.status === 429 ||
-      (error.status !== undefined && error.status >= 500)
-    );
+    return error.status !== 401 && error.status !== 403;
   }
-  return false;
+  // Non-API errors here are our own validation failures (bad JSON,
+  // failed schema check, past checkin date, etc.) — worth retrying.
+  return true;
 }
 
 /**
@@ -137,13 +140,16 @@ export class TestDataGenerator {
   private static async callClaudeAndValidate(
     scenario: string
   ): Promise<Booking> {
+    const todayIso = new Date().toISOString().split('T')[0];
+
     const prompt = `Generate a Restful Booker hotel booking in JSON format.
+Today's date is ${todayIso}.
 Scenario: ${scenario}
 Requirements:
 - firstname and lastname must be realistic names
 - totalprice must be a number between 50 and 500
 - depositpaid must be true or false
-- checkin must be a future date in YYYY-MM-DD format
+- checkin must be a date AFTER ${todayIso}, in YYYY-MM-DD format
 - checkout must be after checkin by at least 1 day
 - additionalneeds must be one of: Breakfast, Lunch, Dinner, None
 Return ONLY valid JSON matching this exact schema. No explanation. No markdown. JSON only:
@@ -158,7 +164,6 @@ Return ONLY valid JSON matching this exact schema. No explanation. No markdown. 
   },
   "additionalneeds": string
 }`;
-
     logger.debug('Requesting booking from Claude', { scenario });
 
     const message = await client.messages.create({
