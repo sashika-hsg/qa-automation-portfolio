@@ -1,5 +1,4 @@
 import { chromium } from '@playwright/test';
-import { SAUCE_DEMO_USERS } from './src/utils/testData';
 import { LoginPage } from './src/pages/sauceDemo';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -14,10 +13,15 @@ import * as path from 'path';
  *  - Ex: with 25 UI tests x3 browsers = 75 fewer login operations per CI run
  *
  * What gets saved in storageState:
- *  - Cookies - ssession tokens
+ *  - Cookies - session tokens
  *  - localStorage - client-side auth data
- *  - sessionStorage - sesion-specific auth data
+ *
+ * Note: sessionStorage is NOT captured by storageState. Playwright only
+ * persists cookies and localStorage - sessionStorage is intentionally
+ * excluded since it's meant to be scoped to a single tab/session rather
+ * than reused across contexts.
  */
+
 async function globalSetup(): Promise<void> {
   // Skip if running DB or API tests only
   if (
