@@ -151,6 +151,7 @@ mkdir -p docs/adr
 mkdir -p docs/usability
 mkdir -p docs/ai-integration
 mkdir -p docs/sql-learning
+mkdir -p docs/test-management
 
 echo "  docs/ folders created"
 
